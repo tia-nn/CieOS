@@ -9,7 +9,11 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -masm=intel")
 set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} -masm=intel")
 
 include_directories(include)
-add_library(CieOS SHARED src/main.c include/main.h include/bootloader/memory_map.h include/bootloader/uefi_base.h include/bootloader/graphics_config.h include/std.h)
+add_library(CieOS SHARED
+        src/main.c
+        src/graphics/output.c
+        src/font/hankaku.c
+        src/std.c)
 
 set_target_properties(CieOS PROPERTIES PREFIX "")
 set_target_properties(CieOS PROPERTIES OUTPUT_NAME "kernel")
