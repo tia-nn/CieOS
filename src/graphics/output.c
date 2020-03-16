@@ -9,7 +9,16 @@
 #include <bootloader/graphics_config.h>
 #include <font/hankaku.h>
 
-void graphics_fill(GraphicsConfig *gc, uint32_t color) {
+GraphicsConfig *g_graphics_config;
+
+
+bool gc_global_init(GraphicsConfig *gc) {
+    g_graphics_config = gc;
+    draw_fill(0x000000);
+    return true;
+}
+
+void gc_draw_fill(GraphicsConfig *gc, uint32_t color) {
     uint64_t *buf = (uint64_t *) gc->framebuffer;
     uint64_t c = (uint64_t)color << 32 | color;
     for (uint64_t i = 0;
@@ -18,7 +27,7 @@ void graphics_fill(GraphicsConfig *gc, uint32_t color) {
     }
 }
 
-bool graphics_pixel(GraphicsConfig *gc, uint64_t x, uint64_t y, uint32_t color) {
+bool gc_draw_pixel(GraphicsConfig *gc, uint64_t x, uint64_t y, uint32_t color) {
     const uint64_t width = gc->info.HorizontalResolution;
     const uint64_t height = gc->info.VerticalResolution;
 
@@ -30,7 +39,7 @@ bool graphics_pixel(GraphicsConfig *gc, uint64_t x, uint64_t y, uint32_t color) 
     return true;
 }
 
-bool graphics_char(GraphicsConfig *gc, char c, uint64_t x, uint64_t y, uint32_t color) {
+bool gc_draw_char(GraphicsConfig *gc, char c, uint64_t x, uint64_t y, uint32_t color) {
     uint8_t *f = FONT[c];
     bool ret = false;
 
@@ -38,10 +47,23 @@ bool graphics_char(GraphicsConfig *gc, char c, uint64_t x, uint64_t y, uint32_t 
         for (uint64_t j = 0; j < 8; j++) {
             uint8_t a = f[i] & (0b10000000u >> j);
             if (a) {
-                ret |= !graphics_pixel(gc, x + j, y + i, color);
+                ret |= !gc_draw_pixel(gc, x + j, y + i, color);
             }
         }
     }
 
     return !ret;
+}
+
+
+void draw_fill(uint32_t color) {
+    gc_draw_fill(g_graphics_config, color);
+}
+
+bool draw_pixel(uint64_t x, uint64_t y, uint32_t color) {
+    return gc_draw_pixel(g_graphics_config, x, y, color);
+}
+
+bool draw_char(char c, uint64_t x, uint64_t y, uint32_t color) {
+    return gc_draw_char(g_graphics_config, c, x, y, color);
 }
