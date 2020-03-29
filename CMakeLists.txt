@@ -13,7 +13,7 @@ add_library(CieOS SHARED
         src/main.c
         src/graphics/output.c
         src/font/hankaku.c
-        src/std.c)
+        src/std.c src/graphics/console.c include/graphics/console.h)
 
 set_target_properties(CieOS PROPERTIES PREFIX "")
 set_target_properties(CieOS PROPERTIES OUTPUT_NAME "kernel")

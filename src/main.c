@@ -2,20 +2,24 @@
 #include <std.h>
 #include <bootloader/graphics_config.h>
 #include <graphics/output.h>
+#include <graphics/console.h>
 
 
 void _start(GraphicsConfig *graphics_config) {
     gc_global_init(graphics_config);
+    Console _console;
+    Console *console = &_console;
+    console_init(console, graphics_config);
 
-    uint64_t color = 0xaaeeff;
+    draw_fill(0x000000);
 
-    gc_draw_fill(graphics_config, color);
-    for (uint64_t i = 0; i < graphics_config->info.VerticalResolution; i ++) {
-        gc_draw_pixel(graphics_config, i, i, ~color);
-    }
-    gc_draw_char(graphics_config, 'C', 3, 1, 0x333333);
+    draw_char('A', 16, 0, 0xffffff);
+    draw_char('B', 16, 16, 0xffffff);
+    draw_char('C', 16, 32, 0xffffff);
 
-    draw_char('B', 10, 15, 0x555555);
+    console_print(console, "A");
+    console_print(console, "B");
+    console_print(console, "C");
 
     while (true) hstop();
 }
