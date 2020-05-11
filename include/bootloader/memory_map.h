@@ -2,8 +2,8 @@
 // Created by tia on 2020/03/16.
 //
 
-#ifndef CIEOS_MEMORY_MAP_H
-#define CIEOS_MEMORY_MAP_H
+#ifndef CIEOS_INCLUDE_BOOTLOADER_MEMORY_MAP_H
+#define CIEOS_INCLUDE_BOOTLOADER_MEMORY_MAP_H
 
 
 #include <stdint.h>
@@ -15,8 +15,27 @@
 typedef UINT64 EFI_PHYSICAL_ADDRESS;
 typedef UINT64 EFI_VIRTUAL_ADDRESS;
 
+enum EFI_MEMORY_TYPE {
+    EfiReservedMemoryType,
+    EfiLoaderCode,
+    EfiLoaderData,
+    EfiBootServicesCode,
+    EfiBootServicesData,
+    EfiRuntimeServicesCode,
+    EfiRuntimeServicesData,
+    EfiConventionalMemory,
+    EfiUnusableMemory,
+    EfiACPIReclaimMemory,
+    EfiACPIMemoryNVS,
+    EfiMemoryMappedIO,
+    EfiMemoryMappedIOPortSpace,
+    EfiPalCode,
+    EfiPersistentMemory,
+    EfiMaxMemoryType
+};
+
 typedef struct {
-    UINT32 Type;
+    enum EFI_MEMORY_TYPE Type;
     EFI_PHYSICAL_ADDRESS PhysicalStart;
     EFI_VIRTUAL_ADDRESS VirtualStart;
     UINT64 NumberOfPages;
@@ -34,4 +53,4 @@ typedef struct MemoryMap {
 } MemoryMap;
 
 
-#endif //CIEOS_MEMORY_MAP_H
+#endif //CIEOS_INCLUDE_BOOTLOADER_MEMORY_MAP_H

@@ -2,8 +2,8 @@
 // Created by tia on 2020/03/16.
 //
 
-#ifndef CIEOS_GRAPHICS_CONFIG_H
-#define CIEOS_GRAPHICS_CONFIG_H
+#ifndef CIEOS_INCLUDE_BOOTLOADER_GRAPHICS_CONFIG_H
+#define CIEOS_INCLUDE_BOOTLOADER_GRAPHICS_CONFIG_H
 
 #include <stdint.h>
 #include <bootloader/uefi_base.h>
@@ -43,4 +43,4 @@ typedef struct GraphicsConfig {
 } GraphicsConfig;
 
 
-#endif //CIEOS_GRAPHICS_CONFIG_H
+#endif //CIEOS_INCLUDE_BOOTLOADER_GRAPHICS_CONFIG_H
