@@ -9,6 +9,7 @@
 #include <descriptor/interrupt.h>
 #include <pic.h>
 
+void task_2();
 __attribute__((always_inline)) void set_segment_register(uint16_t cs, uint16_t ds, uint16_t ss);
 
 void _start(GraphicsConfig *graphics_config, MemoryMap *memory_map, void *acpi_table, void* code_top, void *entrypoint) {
@@ -35,80 +36,33 @@ void _start(GraphicsConfig *graphics_config, MemoryMap *memory_map, void *acpi_t
     M_LOAD_IDT();
 
     __asm__ volatile ("sti");
-//
-//    print("GDT, IDT loaded, and segment selector set");
-//
-//    draw_char('A', 16, 0, 0xffffff);
-//    draw_char('B', 16, 16, 0xffffff);
-//    draw_char('C', 16, 32, 0xffffff);
-//
-//    puts("hogehoge");
-//    puts("fugafuga");
-//    puts("piyopiyo");
-//
-//    print("hogehoge%", "fugafuga");
 
-//    print_memory_map(memoryMap);
-
-//    volatile int div_by_zero = 10 / 0;
-
-//    uint64_t rcx_1, rcx_2, rax_1, rax_2, rdx_1, rdx_2;
-//
-//    __asm__ volatile ("mov rax, rsp": "=a"(rax_1));
-//    __asm__ volatile ("": "=d"(rdx_1));
-//    __asm__ volatile ("": "=c"(rcx_1));
-//    __asm__ volatile ("int 32");
-////    print("print_test");
-//    __asm__ volatile ("mov rax, rsp": "=a"(rax_2));
-//    __asm__ volatile ("": "=d"(rdx_2));
-//    __asm__ volatile ("": "=c"(rcx_2));
-//
-//    char buf[17], buf_2[17];
-//
-//    itoa(rax_1, buf, 17, 16, SET_NULL_TERMINATE | FILL_ZERO);
-//    itoa(rax_2, buf_2, 17, 16, SET_NULL_TERMINATE | FILL_ZERO);
-//
-//    print("before : %", buf);
-//    print("after :  %", buf_2);
-//
-//    itoa(rdx_1, buf, 17, 16, SET_NULL_TERMINATE | FILL_ZERO);
-//    itoa(rdx_2, buf_2, 17, 16, SET_NULL_TERMINATE | FILL_ZERO);
-//
-//    print("before : %", buf);
-//    print("after :  %", buf_2);
-//
-//    itoa(rcx_1, buf, 17, 16, SET_NULL_TERMINATE | FILL_ZERO);
-//    itoa(rcx_2, buf_2, 17, 16, SET_NULL_TERMINATE | FILL_ZERO);
-//
-//    print("before : %", buf);
-//    print("after :  %", buf_2);
-
-//    __asm__ volatile ("int 13");
-
-
+    task_2();
 
     uint64_t last = TIMER_COUNT;
     uint64_t i = 0;
     while (true) {
         if (last + 10 < TIMER_COUNT) {
             last = TIMER_COUNT;
-
-//        __asm__ volatile ("mov rax, rsp": "=a"(rax_2));
-//        itoa(rax_1, buf, 17, 16, SET_NULL_TERMINATE | FILL_ZERO);
-//        itoa(rax_2, buf_2, 17, 16, SET_NULL_TERMINATE | FILL_ZERO);
-//
-//        print("before : %", buf);
-//        print("after :  %", buf_2);
-
             print("100 count");
         }
+        halt();
+    }
+}
 
-//        draw_pixel(i, i, WHITE);
-//        draw_char('A' + i, i, i, GRAY);
-//        i ++;
+
+void task_2() {
+    uint64_t last = 0;
+    uint32_t color = 0;
+    static const uint32_t color_max = 0x1000000;
+    while (true) {
+        if (TIMER_COUNT != last) {
+            draw_char('O', draw_get_width() - 8, draw_get_height() - 16, color);
+            color = (color + 1) % color_max;
+            last = TIMER_COUNT;
+        }
         halt();
     };
-    hstop();
 }
 
 

@@ -28,5 +28,6 @@ bool draw_pixel(uint64_t x, uint64_t y, uint32_t color);
 bool draw_char(char c, uint64_t x, uint64_t y, uint32_t color);
 
 uint64_t draw_get_height();
+uint64_t draw_get_width();
 
 #endif //CIEOS_INCLUDE_GRAPHICS_DRAW_H

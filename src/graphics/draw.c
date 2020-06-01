@@ -84,6 +84,10 @@ uint64_t draw_get_height() {
     return g_graphics_config->info.VerticalResolution;
 }
 
+uint64_t draw_get_width() {
+    return g_graphics_config->info.HorizontalResolution;
+}
+
 bool draw_init(GraphicsConfig *gc) {
     g_graphics_config = gc;
     gc_draw_fill(gc, gBGCOLOR);
