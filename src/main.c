@@ -8,6 +8,7 @@
 #include <descriptor/segment.h>
 #include <descriptor/interrupt.h>
 #include <pic.h>
+#include <interrupt_handler.h>
 
 void task_2();
 __attribute__((always_inline)) void set_segment_register(uint16_t cs, uint16_t ds, uint16_t ss);
@@ -18,16 +19,13 @@ void _start(GraphicsConfig *graphics_config, MemoryMap *memory_map, void *acpi_t
     KERNEL_LOADED_POINT = code_top;
     ENTRY_POINT = entrypoint;
 
-//    char top_buf[17];
-//    itoa((uint64_t)code_top, top_buf, 17, 16, SET_NULL_TERMINATE|FILL_ZERO);
-//    print("top: %", top_buf);
-
     __asm__ volatile ("cli");
 
     GDT_init();
     M_LOAD_GDT();
     set_segment_register(8, 16, 16);
 
+    init_schedule();
     pic_init();
     pic_timer_init();
     pic_set(0b11111000, 0b11111111); // master: slavePic, KBC, timer | slave:
@@ -37,7 +35,9 @@ void _start(GraphicsConfig *graphics_config, MemoryMap *memory_map, void *acpi_t
 
     __asm__ volatile ("sti");
 
-    task_2();
+//    print_memory_map(memory_map);
+
+//    task_2();
 
     uint64_t last = TIMER_COUNT;
     uint64_t i = 0;
@@ -48,21 +48,6 @@ void _start(GraphicsConfig *graphics_config, MemoryMap *memory_map, void *acpi_t
         }
         halt();
     }
-}
-
-
-void task_2() {
-    uint64_t last = 0;
-    uint32_t color = 0;
-    static const uint32_t color_max = 0x1000000;
-    while (true) {
-        if (TIMER_COUNT != last) {
-            draw_char('O', draw_get_width() - 8, draw_get_height() - 16, color);
-            color = (color + 1) % color_max;
-            last = TIMER_COUNT;
-        }
-        halt();
-    };
 }
 
 

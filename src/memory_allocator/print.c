@@ -93,17 +93,23 @@ void print_memory_map(MemoryMap *mm) {
 
     uint64_t size = mm->memory_map_size / mm->descriptor_size;
 
-    for (uint64_t i = 0; i < size; i ++) {
+    for (uint64_t i = 0; i < 30 /* size */; i ++) {
         const EFI_MEMORY_DESCRIPTOR * const iter = (uint64_t)mm->memory_map + i * mm->descriptor_size;
         char start[17], end[17], size[17];
+        char *status;
         itoa(iter->PhysicalStart, start, 17, 16,
                 FILL_ZERO | SET_NULL_TERMINATE);
         itoa(iter->PhysicalStart + iter->NumberOfPages * 0x1000 - 1, end,
                 17, 16, FILL_ZERO | SET_NULL_TERMINATE);
         itoa(iter->NumberOfPages * 0x1000, size, 17, 16,
                 FILL_ZERO | SET_NULL_TERMINATE);
+        if (is_usable_memory_type(iter->Type)) {
+            status = "usable  ";
+        } else {
+            status = "unusable";
+        }
         const char * type = get_memory_type(iter->Type);
-        print("% % % %", start, end, size, type);
+        print("% % % % %", start, end, size, status, type);
     }
 
 }

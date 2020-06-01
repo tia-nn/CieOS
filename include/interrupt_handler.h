@@ -18,4 +18,6 @@ void int_32_handler(struct InterruptFrame *frame);
 void int_13_handler(struct InterruptFrame *frame);
 void int_33_handler(struct InterruptFrame *frame);
 
+void init_schedule();
+
 #endif //CIEOS_INTERRUPT_HANDLER_H
