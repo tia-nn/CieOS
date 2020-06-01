@@ -10,6 +10,8 @@
 static const char NUMBER[] = "0123456789abcdefghijklmnopqrstuvwxyz";
 static const char NUMBER_UPPERCASE[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+void * KERNEL_LOADED_POINT;
+void * ENTRY_POINT;
 
 void halt() {
     __asm__ volatile ("hlt");

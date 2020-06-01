@@ -6,7 +6,6 @@
 #include <descriptor/table.h>
 #include <stdint.h>
 #include <std.h>
-#include <tiff.h>
 #include <interrupt_handler.h>
 #include <int_default_handler_array.h>
 
@@ -37,6 +36,10 @@ void IDT_init() {
     for (uint16_t vector = 0; vector < 256; vector ++) {
         IDT_set(vector, INT_DEFAULT_HANDLER_ARRAY[vector], 8, 0, 0xe, 0);
     }
+
+    IDT_set(32, (void *)int_32_handler, 8, 0, 0x0e, 0);
+    IDT_set(13, (void *)int_13_handler, 8, 0, 0x0e, 0);
+    IDT_set(33, (void *)int_33_handler, 8, 0, 0x0e, 0);
 
     // more specific set...
 }

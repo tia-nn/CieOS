@@ -1,0 +1,33 @@
+//
+// Created by tia on 2020/05/11.
+//
+
+#include <pic.h>
+#include <stdint.h>
+
+void pic_init() {
+    outp(0x20, 0x11);
+    outp(0x21, 0x20);
+    outp(0x21, 0x04);
+    outp(0x21, 0x05);
+    outp(0x21, 0xff);
+
+    outp(0xa0, 0x11);
+    outp(0xa1, 0x28);
+    outp(0xa1, 0x02);
+    outp(0xa1, 0x01);
+    outp(0xa1, 0xff);
+}
+
+void pic_set(uint8_t master, uint8_t slave) {
+    outp_v(0x21, master);
+    outp_v(0xa1, slave);
+}
+
+void pic_timer_init() {
+    outp(0x43, 0b00110100);
+//    outp(0x40, 0x9b);  // 1193182 Hz / 20 = 0xe90b (0.05s)
+//    outp(0x40, 0xe9);
+    outp(0x40, 0x00);
+    outp(0x40, 0x30);
+}

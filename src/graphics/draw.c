@@ -55,7 +55,7 @@ void gc_draw_scroll(GraphicsConfig *gc, uint64_t scroll_height, uint32_t color) 
     uint64_t diff = scroll_height * gc->info.HorizontalResolution;
     uint64_t size = gc->info.HorizontalResolution * gc->info.VerticalResolution;
     uint64_t i;
-    for (i = 0; i < size - diff; i ++) {
+    for (i = 0; i < size; i ++) {
         ((uint32_t*)gc->framebuffer)[i] = ((uint32_t*)gc->framebuffer)[i + diff];
     }
     for (; i < size; i ++) {
@@ -69,7 +69,6 @@ void draw_fill(uint32_t color) {
 }
 
 void draw_scroll(uint64_t scroll_height, uint32_t color) {
-    draw_char('T', 32, 16, 0xffffff);
     gc_draw_scroll(g_graphics_config, scroll_height, color);
 }
 

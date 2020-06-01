@@ -28,6 +28,11 @@ enum ITOA_FRAGS {
 };
 
 
+extern uint64_t TIMER_COUNT;
+extern void * KERNEL_LOADED_POINT;
+extern void * ENTRY_POINT;
+
+
 void halt();
 void hstop();
 

@@ -22,7 +22,8 @@ extern const uint32_t gBGCOLOR;
 bool draw_init(GraphicsConfig *gc);
 
 void draw_fill(uint32_t color);
-void draw_scroll(uint64_t scroll_height, uint32_t color);
+// DO NOT USE.
+//void draw_scroll(uint64_t scroll_height, uint32_t color);
 bool draw_pixel(uint64_t x, uint64_t y, uint32_t color);
 bool draw_char(char c, uint64_t x, uint64_t y, uint32_t color);
 

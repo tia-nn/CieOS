@@ -1,5 +1,3 @@
-from collections import namedtuple
-
 info = [
     '0 - Divide Error Exception (#DE)',
     '1 - Debug Exception (#DB)',
