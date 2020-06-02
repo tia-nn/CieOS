@@ -10,7 +10,6 @@
 #include <pic.h>
 #include <interrupt_handler.h>
 
-void task_2();
 __attribute__((always_inline)) void set_segment_register(uint16_t cs, uint16_t ds, uint16_t ss);
 
 void _start(GraphicsConfig *graphics_config, MemoryMap *memory_map, void *acpi_table, void* code_top, void *entrypoint) {
@@ -25,7 +24,7 @@ void _start(GraphicsConfig *graphics_config, MemoryMap *memory_map, void *acpi_t
     M_LOAD_GDT();
     set_segment_register(8, 16, 16);
 
-    init_schedule();
+    schedule_init();
     pic_init();
     pic_timer_init();
     pic_set(0b11111000, 0b11111111); // master: slavePic, KBC, timer | slave:
@@ -37,16 +36,14 @@ void _start(GraphicsConfig *graphics_config, MemoryMap *memory_map, void *acpi_t
 
 //    print_memory_map(memory_map);
 
-//    task_2();
-
     uint64_t last = TIMER_COUNT;
     uint64_t i = 0;
     char buf[17];
     while (true) {
-        if (last + 10 < TIMER_COUNT) {
+        if (last + 100 < TIMER_COUNT) {
             last = TIMER_COUNT;
             itoa(last, buf, 17, 10, SET_NULL_TERMINATE);
-            print("10 count, %", buf);
+            print("TIMER_COUNT: %", buf);
         }
         halt();
     }

@@ -14,10 +14,10 @@ struct InterruptFrame {
     uint64_t ss;
 };
 
-void int_32_handler(struct InterruptFrame *frame);
+void int_32_handler(struct InterruptFrame *frame);  // timer.s
 void int_13_handler(struct InterruptFrame *frame);
 void int_33_handler(struct InterruptFrame *frame);
 
-void init_schedule();
+void schedule_init();
 
 #endif //CIEOS_INTERRUPT_HANDLER_H

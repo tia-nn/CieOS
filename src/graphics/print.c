@@ -26,7 +26,7 @@ uint64_t put(const char *str, uint64_t col) {
         } else if (str[i] == '\r') {
             col = 0;
         } else {
-            draw_char(str[i], col * 8, row * 16, gPRINTCOLOR);
+            draw_char_bg(str[i], col * 8, row * 16, gPRINTCOLOR);
         }
     }
     return col;
@@ -38,10 +38,8 @@ void puts(const char *str) {
     }
 
     put(str, 0);
-//    draw_scroll(16, gBGCOLOR);
 }
 
-//__attribute__((no_caller_saved_registers))
 void print(const char *format, ...) {
     if (max_row == 0) {
         max_row = draw_get_height() / 16;
@@ -59,7 +57,7 @@ void print(const char *format, ...) {
         } else if (format[i] == '%') {
             col = put(va_arg(ap, char *), col);
         } else {
-            draw_char(format[i], col * 8, row * 16, gPRINTCOLOR);
+            draw_char_bg(format[i], col * 8, row * 16, gPRINTCOLOR);
         }
     }
     row = (row + 1) % max_row;

@@ -9,9 +9,6 @@
 
 __attribute__((interrupt))
 void int_13_handler(struct InterruptFrame *frame) {
-//    uint64_t rcx_val;
-//    __asm__ volatile ("" : "=c"(rcx_val));
-    char rcx[17];
     char errorcode[17], rip[17], cs[17], rflags[17], rsp[17], ss[17];
 
     char offset_buf[17];
@@ -23,7 +20,6 @@ void int_13_handler(struct InterruptFrame *frame) {
     itoa(frame->rflags, rflags, 17, 16, SET_NULL_TERMINATE | FILL_ZERO);
     itoa(frame->rsp, rsp, 17, 16, SET_NULL_TERMINATE | FILL_ZERO);
     itoa(frame->ss, ss, 17, 16, SET_NULL_TERMINATE | FILL_ZERO);
-//    itoa(rcx_val, rcx, 17, 16, SET_NULL_TERMINATE | FILL_ZERO);
 
     print("interrupt --- %", "13 - #GP");
     print("error_code: %", errorcode);
@@ -32,7 +28,6 @@ void int_13_handler(struct InterruptFrame *frame) {
     print("rflags:     %", rflags);
     print("rsp:        %", rsp);
     print("ss:         %", ss);
-//    print("rcx:        %", rcx);
 
     hstop();
 }

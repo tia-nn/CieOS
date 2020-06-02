@@ -26,8 +26,6 @@ void pic_set(uint8_t master, uint8_t slave) {
 
 void pic_timer_init() {
     outp(0x43, 0b00110100);
-//    outp(0x40, 0x9b);  // 1193182 Hz / 20 = 0xe90b (0.05s)
-//    outp(0x40, 0xe9);
-    outp(0x40, 0x00);
-    outp(0x40, 0x30);
+    outp(0x40, 0x9c);  // 1193182 Hz / 100 = 0x2e9c (0.001s)
+    outp(0x40, 0x2e);
 }

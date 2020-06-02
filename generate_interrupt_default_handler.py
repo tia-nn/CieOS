@@ -282,19 +282,17 @@ void int_{}_default_handler () {{
 }}
 '''
 
-for i, v in enumerate(info):
-    with open(f'handler/int_{i}.c', 'w') as file:
-        file.write(header)
+
+with open('src/interrupt_default_handler/int_default.c', 'w') as file:
+    file.write(header)
+    for i, v in enumerate(info):
         file.write(main.format(i, v))
-        file.close()
 
-print(' '.join([f'handler/int_{i}.c' for i in range(256)] + ['handler/int_defalut_handler_array.c']))
-
-with open('handler/int_defalut_handler_array.c', 'w') as file:
+with open('src/interrupt_default_handler/int_defalut_handler_array.c', 'w') as file:
     main = ',\n'.join([f'(void *)int_{i}_default_handler' for i in range(256)])
     file.write(f'#include "int_defalut_handler.h"\nvoid *INT_DEFAULT_HANDLER_ARRAY[256] = {{{main}}};')
 
-with open('handler/int_defalut_handler.h', 'w') as file:
+with open('src/interrupt_default_handler/int_defalut_handler.h', 'w') as file:
     main = '\n'.join([f'void int_{i}_default_handler();' for i in range(256)])
     file.write(f'''
 #ifndef CIEOS_HANDLER_INT_DEFAULT_HANDLER_H
@@ -305,7 +303,7 @@ with open('handler/int_defalut_handler.h', 'w') as file:
 #endif // CIEOS_HANDLER_INT_DEFAULT_HANDLER_H
 ''')
 
-with open('int_default_handler_array.h', 'w') as file:
+with open('include/int_default_handler_array.h', 'w') as file:
     file.write('''
 
 #ifndef CIEOS_HANDLER_INT_DEFAULT_HANDLER_ARRAY_H

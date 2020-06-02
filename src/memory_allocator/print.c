@@ -93,8 +93,8 @@ void print_memory_map(MemoryMap *mm) {
 
     uint64_t size = mm->memory_map_size / mm->descriptor_size;
 
-    for (uint64_t i = 0; i < 30 /* size */; i ++) {
-        const EFI_MEMORY_DESCRIPTOR * const iter = (uint64_t)mm->memory_map + i * mm->descriptor_size;
+    for (uint64_t i = 0; i < 30 /* size だと画面に入り切らないので */; i ++) {
+        const EFI_MEMORY_DESCRIPTOR * const iter = (EFI_MEMORY_DESCRIPTOR*)((uint64_t)mm->memory_map + i * mm->descriptor_size);
         char start[17], end[17], size[17];
         char *status;
         itoa(iter->PhysicalStart, start, 17, 16,
