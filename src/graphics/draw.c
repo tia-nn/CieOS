@@ -44,6 +44,8 @@ bool gc_draw_char(GraphicsConfig *gc, char c, uint64_t x, uint64_t y, uint32_t c
             uint8_t a = f[i] & (0b10000000u >> j);
             if (a) {
                 ret |= !gc_draw_pixel(gc, x + j, y + i, color);
+            } else {
+                ret |= !gc_draw_pixel(gc, x + j, y + i, gBGCOLOR);
             }
         }
     }

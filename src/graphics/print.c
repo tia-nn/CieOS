@@ -22,7 +22,6 @@ uint64_t put(const char *str, uint64_t col) {
     for (uint64_t i = 0; str[i]; i ++, col ++) {
         if (str[i] == '\n') {
             col = 0;
-//            draw_scroll(16, gBGCOLOR);
             row = (row + 1) % max_row;
         } else if (str[i] == '\r') {
             col = 0;
@@ -54,7 +53,6 @@ void print(const char *format, ...) {
     for (uint64_t i = 0; format[i]; i ++, col ++) {
         if (format[i] == '\n') {
             col = 0;
-//            draw_scroll(16, gBGCOLOR);
             row = (row + 1) % max_row;
         } else if (format[i] == '\r') {
             col = 0;
@@ -64,6 +62,5 @@ void print(const char *format, ...) {
             draw_char(format[i], col * 8, row * 16, gPRINTCOLOR);
         }
     }
-//    draw_scroll(16, gBGCOLOR);
     row = (row + 1) % max_row;
 }

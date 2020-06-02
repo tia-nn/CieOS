@@ -41,10 +41,12 @@ void _start(GraphicsConfig *graphics_config, MemoryMap *memory_map, void *acpi_t
 
     uint64_t last = TIMER_COUNT;
     uint64_t i = 0;
+    char buf[17];
     while (true) {
         if (last + 10 < TIMER_COUNT) {
             last = TIMER_COUNT;
-            print("100 count");
+            itoa(last, buf, 17, 10, SET_NULL_TERMINATE);
+            print("10 count, %", buf);
         }
         halt();
     }
