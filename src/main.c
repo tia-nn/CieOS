@@ -38,13 +38,16 @@ void _start(GraphicsConfig *graphics_config, MemoryMap *memory_map, void *acpi_t
 
     uint64_t last = TIMER_COUNT;
     uint64_t i = 0;
+    uint64_t _ = 0;
     char buf[17];
     while (true) {
         if (last + 100 < TIMER_COUNT) {
             last = TIMER_COUNT;
             itoa(last, buf, 17, 10, SET_NULL_TERMINATE);
-            print("TIMER_COUNT: %", buf);
+//            __asm__ volatile ("int 0x80" : "=a"(_) : "a"(i));
+            int_0x80_1("0x80.");
         }
+        i ++;
         halt();
     }
 }

@@ -23,11 +23,11 @@ add_library(CieOS SHARED
         src/interrupt_handler/timer.s
         src/interrupt_handler/general_protect.c
         src/interrupt_handler/keyboard.c
-        src/schedule.c
+        src/interrupt_handler/systemcall.c
+        src/interrupt_handler/systemcall.s
 
         src/interrupt_default_handler/int_default.c
-        src/interrupt_default_handler/int_defalut_handler_array.c
-        )
+        src/interrupt_default_handler/int_defalut_handler_array.c)
 
 set_target_properties(CieOS PROPERTIES PREFIX "")
 set_target_properties(CieOS PROPERTIES OUTPUT_NAME "kernel")
