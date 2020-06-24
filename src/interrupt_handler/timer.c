@@ -51,8 +51,8 @@ void int_32_handler_schedule(struct TaskRegisterState *register_state) {  // cal
 }
 
 void schedule_init() {
-    task_register_state[1].cs = 0x08;
-    task_register_state[1].ss = 0x10;
+    task_register_state[1].cs = 0x18;
+    task_register_state[1].ss = 0x20;
     task_register_state[1].rflags =0x202;
     task_register_state[1].rsp = 0x1000;  // 決め打ちなのでなんとかする
     task_register_state[1].rip = (uint64_t)task_2;
@@ -73,7 +73,7 @@ void task_2() {
             last = TIMER_COUNT;
         }
         color = (color + 10) % color_max;
-        halt();
+//        halt();
     };
 }
 

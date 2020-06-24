@@ -44,11 +44,9 @@ void _start(GraphicsConfig *graphics_config, MemoryMap *memory_map, void *acpi_t
         if (last + 100 < TIMER_COUNT) {
             last = TIMER_COUNT;
             itoa(last, buf, 17, 10, SET_NULL_TERMINATE);
-//            __asm__ volatile ("int 0x80" : "=a"(_) : "a"(i));
-            int_0x80_1("0x80.");
+            int_0x80_1("timer 100 count");
         }
         i ++;
-        halt();
     }
 }
 

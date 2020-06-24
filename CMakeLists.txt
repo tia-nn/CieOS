@@ -27,7 +27,7 @@ add_library(CieOS SHARED
         src/interrupt_handler/systemcall.s
 
         src/interrupt_default_handler/int_default.c
-        src/interrupt_default_handler/int_defalut_handler_array.c)
+        src/interrupt_default_handler/int_defalut_handler_array.c src/tasks/tss.c)
 
 set_target_properties(CieOS PROPERTIES PREFIX "")
 set_target_properties(CieOS PROPERTIES OUTPUT_NAME "kernel")

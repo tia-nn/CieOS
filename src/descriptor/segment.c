@@ -64,7 +64,9 @@ void set_code_segment_descriptor_64(struct SegmentDescriptor *dist, bool accesse
 void GDT_init() {
     GDT_set_null(0);
     set_code_segment_descriptor_64(&GDT[1], true, true, false, 0, true, true, true, false, true);
-    set_data_segment_descriptor(&GDT[2], 0, GDT_LIMIT, true, true, false, 0, true, true, true, true);
+    set_data_segment_descriptor(&GDT[2], 0, 0xffffffff, true, true, false, 0, true, true, true, true);
+    set_code_segment_descriptor_64(&GDT[3], true, true, false, 0, true, true, true, false, true);
+    set_data_segment_descriptor(&GDT[4], 0, 0xffffffff, true, true, false, 0, true, true, true, true);
 }
 
 //__attribute__((always_inline)) inline void load_global_descriptor_table() {

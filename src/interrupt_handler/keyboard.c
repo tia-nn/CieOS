@@ -9,7 +9,7 @@
 #include <pic.h>
 
 __attribute__((interrupt))
-void int_33_handler(struct InterruptFrame *frame) {
+void int_33_handler(union InterruptFrame *frame) {
     uint8_t key_code;
     __asm__ volatile ("in al, 0x60" : "=a"(key_code));
     char buf[3];
