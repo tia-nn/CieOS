@@ -7,8 +7,11 @@
 #include <std.h>
 #include <interrupt_handler.h>
 #include <graphics/draw.h>
+#include <control_registers.h>
 
 struct TaskRegisterState {
+    uint64_t cr3;
+
     uint64_t rax;
     uint64_t rcx;
     uint64_t rdx;
@@ -25,6 +28,7 @@ struct TaskRegisterState {
     uint64_t r13;
     uint64_t r14;
     uint64_t r15;
+
     uint64_t rflags;
     uint64_t ss;
     uint64_t cs;
@@ -51,6 +55,8 @@ void int_32_handler_schedule(struct TaskRegisterState *register_state) {  // cal
 }
 
 void schedule_init() {
+    (*((struct CR3*)&task_register_state[1].cr3)).PML4_addr = 0x2000u >> 12u;
+    (*((struct CR3*)&task_register_state[1].cr3)).PCID = 0;
     task_register_state[1].cs = 0x18;
     task_register_state[1].ss = 0x20;
     task_register_state[1].rflags =0x202;

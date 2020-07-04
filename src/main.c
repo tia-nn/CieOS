@@ -9,6 +9,8 @@
 #include <descriptor/interrupt.h>
 #include <pic.h>
 #include <interrupt_handler.h>
+#include <control_registers.h>
+#include <paging.h>
 
 __attribute__((always_inline)) void set_segment_register(uint16_t cs, uint16_t ds, uint16_t ss);
 
@@ -31,22 +33,46 @@ void _start(GraphicsConfig *graphics_config, MemoryMap *memory_map, void *acpi_t
 
     IDT_init();
     M_LOAD_IDT();
-
-    __asm__ volatile ("sti");
+    init_paging();
 
 //    print_memory_map(memory_map);
 
     uint64_t last = TIMER_COUNT;
     uint64_t i = 0;
     uint64_t _ = 0;
-    char buf[17];
+    char buf[65];
+
+    struct CR0 cr0;
+    struct CR3 cr3;
+    uint64_t cr4;
+
+    __asm__ volatile ("mov rax, cr0" : "=a"(cr0));
+    __asm__ volatile ("mov rax, cr3" : "=a"(cr3));
+    __asm__ volatile ("mov rax, cr4" : "=a"(cr4));
+
+    struct PageMapLevel4Entry *pml4;
+    pml4 = (void *)((uint64_t)cr3.PML4_addr << 12u);
+
+    for (int i = 0; i < 512; i ++) {
+        PageMapLevel4[i] = pml4[i];
+    }
+
+    cr3.PML4_addr = ((uint64_t)PageMapLevel4) >> 12u;
+
+//    __asm__ volatile ("mov cr4, rax" : : "a"(cr4));
+    __asm__ volatile ("mov cr3, rax" : : "a"(cr3));
+//    __asm__ volatile ("mov cr0, rax" : : "a"(cr0));
+
+    __asm__ volatile ("sti");
+
     while (true) {
         if (last + 100 < TIMER_COUNT) {
             last = TIMER_COUNT;
             itoa(last, buf, 17, 10, SET_NULL_TERMINATE);
             int_0x80_1("timer 100 count");
         }
-        i ++;
+//        i ++;
+        halt();
     }
 }
 
