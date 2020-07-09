@@ -26,12 +26,13 @@ add_library(CieOS SHARED
         src/interrupt_handler/systemcall.c
         src/interrupt_handler/systemcall.s
         src/tasks/tss.c src/paging.c
+        src/file/read_hdd.c
         src/file/read_filesystem.c
 
         src/interrupt_default_handler/int_default.c
         src/interrupt_default_handler/int_defalut_handler_array.c
 
-        )
+        src/interrupt_handler/page_fault.c)
 
 set_target_properties(CieOS PROPERTIES PREFIX "")
 set_target_properties(CieOS PROPERTIES OUTPUT_NAME "kernel")
@@ -39,3 +40,6 @@ set_target_properties(CieOS PROPERTIES SUFFIX ".elf")
 
 set(DIST_PATH "~/Projects/Qemu/test/kernel.elf")
 add_custom_command(TARGET CieOS COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:CieOS> ${DIST_PATH})
+
+set(DIST_PATH_2 "/run/media/tia/EB69-F2D4/kernel.elf")
+add_custom_command(TARGET CieOS COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:CieOS> ${DIST_PATH_2})
