@@ -18,12 +18,17 @@ uint64_t max_row = 0;
 uint64_t half_col = 0;
 
 
-uint64_t put(uint64_t *row, const char *str, uint64_t col) {
+uint64_t put(uint64_t *row, const char *str, uint64_t init_col, uint64_t now_col) {
     if (max_row == 0) {
         max_row = draw_get_height() / 16;
     }
 
+    uint64_t col = now_col;
     for (uint64_t i = 0; str[i]; i ++, col ++) {
+        if (col > 39 + init_col) {
+            col = init_col;
+            NEWLINE(*row);
+        }
         if (str[i] == '\n') {
             col = 0;
             NEWLINE(*row);
@@ -41,7 +46,7 @@ void puts(const char *str) {
         max_row = draw_get_height() / 16;
     }
 
-    put(&row_left, str, 0);
+    put(&row_left, str, 0, 0);
     NEWLINE(row_left);
 }
 
@@ -53,7 +58,7 @@ void puts_right(const char *str) {
         half_col = draw_get_width() / (2 * 8);
     }
 
-    put(&row_right, str, half_col);
+    put(&row_right, str, half_col, half_col);
     NEWLINE(row_right);
 }
 
@@ -66,16 +71,50 @@ void print(const char *format, ...) {
     va_start(ap, format);
     uint64_t col = 0;
     for (uint64_t i = 0; format[i]; i ++, col ++) {
+        if (col > 39) {
+            col = 0;
+            NEWLINE(row_left);
+        }
         if (format[i] == '\n') {
             col = 0;
             NEWLINE(row_left);
         } else if (format[i] == '\r') {
             col = 0;
         } else if (format[i] == '%') {
-            col = put(&row_left, va_arg(ap, char *), col);
+            col = put(&row_left, va_arg(ap, char *), 0, col);
         } else {
             draw_char_bg(format[i], col * 8, row_left * 16, gPRINTCOLOR);
         }
     }
     NEWLINE(row_left);
+}
+
+void print_right(const char *format, ...) {
+    if (max_row == 0) {
+        max_row = draw_get_height() / 16;
+    }
+    if (half_col == 0) {
+        half_col = draw_get_width() / (2 * 8);
+    }
+
+    va_list ap;
+    va_start(ap, format);
+    uint64_t col = half_col;
+    for (uint64_t i = 0; format[i]; i ++, col ++) {
+        if (col > 39 + half_col) {
+            col = half_col;
+            NEWLINE(row_right);
+        }
+        if (format[i] == '\n') {
+            col = half_col;
+            NEWLINE(row_right);
+        } else if (format[i] == '\r') {
+            col = half_col;
+        } else if (format[i] == '%') {
+            col = put(&row_right, va_arg(ap, char *), half_col, col);
+        } else {
+            draw_char_bg(format[i], col * 8, row_right * 16, gPRINTCOLOR);
+        }
+    }
+    NEWLINE(row_right);
 }

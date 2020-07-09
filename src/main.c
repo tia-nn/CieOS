@@ -11,6 +11,7 @@
 #include <interrupt_handler.h>
 #include <control_registers.h>
 #include <paging.h>
+#include <file/read_hdd.h>
 
 __attribute__((always_inline)) void set_segment_register(uint16_t cs, uint16_t ds, uint16_t ss);
 
@@ -65,13 +66,20 @@ void _start(GraphicsConfig *graphics_config, MemoryMap *memory_map, void *acpi_t
 
     __asm__ volatile ("sti");
 
+    uint8_t hdd_buf[512];
+//    uint64_t lba = 0;
+//    read_lba(lba, 1);
+    read_hdd(hdd_buf, 1, 1);
+    hdd_buf[9] = 0;
+    print(hdd_buf);
+//    read_lba(100, 1);
+
     while (true) {
-        if (last + 100 < TIMER_COUNT) {
+        if (last + 1000 < TIMER_COUNT) {
             last = TIMER_COUNT;
             itoa(last, buf, 17, 10, SET_NULL_TERMINATE);
-            int_0x80_1("timer 100 count");
+            print_right("timer count %", buf);
         }
-//        i ++;
         halt();
     }
 }

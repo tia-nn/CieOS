@@ -73,13 +73,12 @@ void task_2() {
     uint8_t i = 0;
     const uint32_t color_max = 0x1000000;
     while (true) {
-        if (TIMER_COUNT > last + 10) {
+        if (TIMER_COUNT > last + 100) {
             draw_char_bg(chars[i], x, y, color);
             i = (i + 1) % 4;
             last = TIMER_COUNT;
         }
         color = (color + 10) % color_max;
-//        halt();
     };
 }
 

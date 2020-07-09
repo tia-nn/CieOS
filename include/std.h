@@ -32,7 +32,25 @@ struct DoubleWordAccess {
     uint32_t high;
 };
 
-struct BitAccess64 {
+struct WordAccess {
+    uint16_t word_0;
+    uint16_t word_1;
+    uint16_t word_2;
+    uint16_t word_3;
+};
+
+struct ByteAccess {
+    uint8_t byte_0;
+    uint8_t byte_1;
+    uint8_t byte_2;
+    uint8_t byte_3;
+    uint8_t byte_4;
+    uint8_t byte_5;
+    uint8_t byte_6;
+    uint8_t byte_7;
+};
+
+struct BitAccess {
     unsigned bit_0: 1;
     unsigned bit_1: 1;
     unsigned bit_2: 1;
@@ -99,44 +117,10 @@ struct BitAccess64 {
     unsigned bit_63: 1;
 };
 
-struct BitAccess32 {
-    unsigned bit_0: 1;
-    unsigned bit_1: 1;
-    unsigned bit_2: 1;
-    unsigned bit_3: 1;
-    unsigned bit_4: 1;
-    unsigned bit_5: 1;
-    unsigned bit_6: 1;
-    unsigned bit_7: 1;
-    unsigned bit_8: 1;
-    unsigned bit_9: 1;
-    unsigned bit_10: 1;
-    unsigned bit_11: 1;
-    unsigned bit_12: 1;
-    unsigned bit_13: 1;
-    unsigned bit_14: 1;
-    unsigned bit_15: 1;
-    unsigned bit_16: 1;
-    unsigned bit_17: 1;
-    unsigned bit_18: 1;
-    unsigned bit_19: 1;
-    unsigned bit_20: 1;
-    unsigned bit_21: 1;
-    unsigned bit_22: 1;
-    unsigned bit_23: 1;
-    unsigned bit_24: 1;
-    unsigned bit_25: 1;
-    unsigned bit_26: 1;
-    unsigned bit_27: 1;
-    unsigned bit_28: 1;
-    unsigned bit_29: 1;
-    unsigned bit_30: 1;
-    unsigned bit_31: 1;
-};
-
 #define M_DOUBLEWORD_ACCESS(target) (*((struct DoubleWordAccess*)&target))
-#define M_BIT_ACCESS_64(target) (*((struct BitAccess64*)&target))
-#define M_BIT_ACCESS_32(target) (*((struct BitAccess32*)&target))
+#define M_WORD_ACCESS(target) (*((struct WordAccess*)&target))
+#define M_BYTE_ACCESS(target) (*((struct ByteAccess*)&target))
+#define M_BIT_ACCESS(target) (*((struct BitAccess*)&target))
 
 extern uint64_t TIMER_COUNT;
 extern void * KERNEL_LOADED_POINT;
@@ -145,6 +129,7 @@ extern void * ENTRY_POINT;
 
 void halt();
 void hstop();
+void sleepms(uint64_t ms);
 
 DIVMOD divmod(int64_t x, int64_t y);
 void itoa(uint64_t value, char *buffer, uint64_t buffer_size, uint64_t radix, uint32_t flags);

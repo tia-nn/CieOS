@@ -21,6 +21,11 @@ void hstop() {
     while (true) __asm__ volatile ("hlt");
 }
 
+void sleepms(uint64_t ms) {
+    uint64_t now = TIMER_COUNT;
+    while (now + ms > TIMER_COUNT) halt();
+}
+
 
 DIVMOD divmod(int64_t x, int64_t y) {
     DIVMOD ans;

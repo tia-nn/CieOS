@@ -14,8 +14,8 @@
 
 #define outp_v(port, value) __asm__ volatile ( \
     "mov al, %0 \n"\
-    "out "#port", al" \
-    : : "r"(value) \
+    "out %1, al" \
+    : : "r"(value), "r"(port) \
 )
 
 #define PIC_MASTER_EOI() __asm__ volatile (\
