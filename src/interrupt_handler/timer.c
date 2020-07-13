@@ -8,6 +8,7 @@
 #include <interrupt_handler.h>
 #include <graphics/draw.h>
 #include <control_registers.h>
+#include <tasks/tasks.h>
 
 struct TaskRegisterState {
     uint64_t cr3;
@@ -38,16 +39,16 @@ struct TaskRegisterState {
 uint64_t TIMER_COUNT;  // extern definition is in std.h
 
 uint64_t current_task = 0;
-struct TaskRegisterState task_register_state[2];
+#define MAX_TASK_COUNT 3
+struct TaskRegisterState task_register_state[MAX_TASK_COUNT];
 
 void restore_context(struct TaskRegisterState*);  // asm function
-void task_2();
 
 void int_32_handler_schedule(struct TaskRegisterState *register_state) {  // called by asm int handler
     TIMER_COUNT ++;
     task_register_state[current_task] = *register_state;
 
-    current_task = (current_task + 1) % 2;  // max task count is 2
+    current_task = (current_task + 1) % MAX_TASK_COUNT;
     PIC_MASTER_EOI();
     restore_context(&task_register_state[current_task]);
 
@@ -55,32 +56,23 @@ void int_32_handler_schedule(struct TaskRegisterState *register_state) {  // cal
 }
 
 void schedule_init() {
-    (*((struct CR3*)&task_register_state[1].cr3)).PML4_addr = 0x2000u >> 12u;
+    (*((struct CR3*)&task_register_state[1].cr3)).PML4_addr = 0x3000u >> 12u;
     (*((struct CR3*)&task_register_state[1].cr3)).PCID = 0;
     task_register_state[1].cs = 0x18;
     task_register_state[1].ss = 0x20;
     task_register_state[1].rflags =0x202;
     task_register_state[1].rsp = 0x1000;  // 決め打ちなのでなんとかする
     task_register_state[1].rip = (uint64_t)task_2;
+
+    (*((struct CR3*)&task_register_state[2].cr3)).PML4_addr = 0x3000u >> 12u;
+    (*((struct CR3*)&task_register_state[2].cr3)).PCID = 0;
+    task_register_state[2].cs = 0x28;
+    task_register_state[2].ss = 0x30;
+    task_register_state[2].rflags =0x202;
+    task_register_state[2].rsp = 0x2000;  // 決め打ちなのでなんとかする
+    task_register_state[2].rip = (uint64_t)task_3;
 }
 
-
-void task_2() {
-    uint64_t last = 0;
-    uint32_t color = RED;
-    const uint64_t x = draw_get_width() - 8 - 16, y = 16;
-    const char chars[] = {'-', '\\', '|', '/'};
-    uint8_t i = 0;
-    const uint32_t color_max = 0x1000000;
-    while (true) {
-        if (TIMER_COUNT > last + 100) {
-            draw_char_bg(chars[i], x, y, color);
-            i = (i + 1) % 4;
-            last = TIMER_COUNT;
-        }
-        color = (color + 10) % color_max;
-    };
-}
 
 __attribute__((no_caller_saved_registers))
 void dump(uint64_t val) {

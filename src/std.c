@@ -140,3 +140,49 @@ void bool2str(char *dist, bool x) {
         strcpy("false", dist);
     }
 }
+
+const char* bool2straddr(bool x) {
+    if (x) {
+        return "true";
+    } else {
+        return "false";
+    }
+}
+
+bool ringbuf_write(struct RingBuffer* ring_buffer, uint8_t data) {
+    if (ring_buffer->free == 0) {
+        ring_buffer->overflow = true;
+        return false;
+    }
+    else {
+        ring_buffer->buffer[ring_buffer->next_write] = data;
+        ring_buffer->next_write = (ring_buffer->next_write + 1) % RINGBUFFERSIZE;
+        ring_buffer->free --;
+        return true;
+    }
+}
+
+uint8_t ringbuf_read(struct RingBuffer* ring_buffer) {
+    if (ring_buffer->free == RINGBUFFERSIZE) {
+        return 0;
+    }
+    else {
+        uint8_t result;
+        result = ring_buffer->buffer[ring_buffer->next_read];
+        ring_buffer->next_read = (ring_buffer->next_read + 1) % RINGBUFFERSIZE;
+        ring_buffer->free ++;
+        return result;
+    }
+}
+
+bool ringbuf_read_dist(struct RingBuffer* ring_buffer, uint8_t *dist) {
+    if (ring_buffer->free == RINGBUFFERSIZE) {
+        return false;
+    }
+    else {
+        *dist = ring_buffer->buffer[ring_buffer->next_read];
+        ring_buffer->next_read = (ring_buffer->next_read + 1) % RINGBUFFERSIZE;
+        ring_buffer->free ++;
+        return true;
+    }
+}

@@ -67,6 +67,8 @@ void GDT_init() {
     set_data_segment_descriptor(&GDT[2], 0, 0xffffffff, true, true, false, 0, true, true, true, true);
     set_code_segment_descriptor_64(&GDT[3], true, true, false, 0, true, true, true, false, true);
     set_data_segment_descriptor(&GDT[4], 0, 0xffffffff, true, true, false, 0, true, true, true, true);
+    set_code_segment_descriptor_64(&GDT[5], true, true, false, 0, true, true, true, false, true);
+    set_data_segment_descriptor(&GDT[6], 0, 0xffffffff, true, true, false, 0, true, true, true, true);
 }
 
 //__attribute__((always_inline)) inline void load_global_descriptor_table() {

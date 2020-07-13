@@ -11,7 +11,7 @@ struct PageDirectoryPointerTableEntry_1GBPage PageDirectoryPointerTable[512];
 
 
 void init_paging() {
-    PageMapLevel4 = (void *)0x2000;
+    PageMapLevel4 = (void *)0x3000;
 
     for (int64_t i = 0; i < 512; i ++) {
         struct PageMapLevel4Entry *pmle = &PageMapLevel4[i];

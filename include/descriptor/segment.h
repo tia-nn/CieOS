@@ -63,7 +63,7 @@ void GDT_init();
 //: : "m"(gdtr));\
 //} while(0);
 
-#define GDT_LEN 5
+#define GDT_LEN 7
 #define GDT_DESCRIPTOR_SIZE (sizeof(struct SegmentDescriptor))
 #define GDT_LIMIT (GDT_LEN * GDT_DESCRIPTOR_SIZE - 1)
 

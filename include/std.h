@@ -27,6 +27,16 @@ enum ITOA_FRAGS {
     ZERO_IS_EMPTY       = 0x40
 };
 
+#define RINGBUFFERSIZE 32
+
+struct RingBuffer {
+    uint8_t buffer[RINGBUFFERSIZE];
+    uint8_t free;
+    uint8_t next_write;
+    uint8_t next_read;
+    bool overflow;
+};
+
 struct DoubleWordAccess {
     uint32_t low;
     uint32_t high;
@@ -122,7 +132,8 @@ struct BitAccess {
 #define M_BYTE_ACCESS(target) (*((struct ByteAccess*)&target))
 #define M_BIT_ACCESS(target) (*((struct BitAccess*)&target))
 
-extern uint64_t TIMER_COUNT;
+extern uint64_t TIMER_COUNT;  // defined by timer.c
+extern struct RingBuffer KEYBOARD_BUFFER;  // defined by keyboard.c
 extern void * KERNEL_LOADED_POINT;
 extern void * ENTRY_POINT;
 
@@ -138,5 +149,9 @@ bool strcmp(const char *a, const char *b);
 void strncpy(const char *src, char *dist, uint64_t n);
 void strcpy(const char *src, char *dist);
 void bool2str(char *dist, bool x);
+const char* bool2straddr(bool x);
+bool ringbuf_write(struct RingBuffer* ring_buffer, uint8_t data);
+uint8_t ringbuf_read(struct RingBuffer* ring_buffer);
+bool ringbuf_read_dist(struct RingBuffer* ring_buffer, uint8_t *dist);
 
 #endif //CIEOS_STD_H

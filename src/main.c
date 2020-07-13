@@ -12,6 +12,7 @@
 #include <control_registers.h>
 #include <paging.h>
 #include <file/read_hdd.h>
+#include <tasks/tasks.h>
 
 __attribute__((always_inline)) void set_segment_register(uint16_t cs, uint16_t ds, uint16_t ss);
 
@@ -38,11 +39,6 @@ void _start(GraphicsConfig *graphics_config, MemoryMap *memory_map, void *acpi_t
 
 //    print_memory_map(memory_map);
 
-    uint64_t last = TIMER_COUNT;
-    uint64_t i = 0;
-    uint64_t _ = 0;
-    char buf[65];
-
     struct CR0 cr0;
     struct CR3 cr3;
     uint64_t cr4;
@@ -66,22 +62,7 @@ void _start(GraphicsConfig *graphics_config, MemoryMap *memory_map, void *acpi_t
 
     __asm__ volatile ("sti");
 
-    uint8_t hdd_buf[512];
-//    uint64_t lba = 0;
-//    read_lba(lba, 1);
-    read_hdd(hdd_buf, 1, 1);
-    hdd_buf[9] = 0;
-    print(hdd_buf);
-//    read_lba(100, 1);
-
-    while (true) {
-        if (last + 1000 < TIMER_COUNT) {
-            last = TIMER_COUNT;
-            itoa(last, buf, 17, 10, SET_NULL_TERMINATE);
-            print_right("timer count %", buf);
-        }
-        halt();
-    }
+    task_1();
 }
 
 
