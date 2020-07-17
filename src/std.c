@@ -149,6 +149,14 @@ const char* bool2straddr(bool x) {
     }
 }
 
+const char* bool2shortstraddr(bool x) {
+    if (x) {
+        return "o";
+    } else {
+        return "x";
+    }
+}
+
 bool ringbuf_write(struct RingBuffer* ring_buffer, uint8_t data) {
     if (ring_buffer->free == 0) {
         ring_buffer->overflow = true;

@@ -4,7 +4,6 @@
 #include <bootloader/memory_map.h>
 #include <graphics/draw.h>
 #include <graphics/print.h>
-#include <memory_allocator/print.h>
 #include <descriptor/segment.h>
 #include <descriptor/interrupt.h>
 #include <pic.h>
@@ -13,6 +12,7 @@
 #include <paging.h>
 #include <file/read_hdd.h>
 #include <tasks/tasks.h>
+#include <memory_allocator.h>
 
 __attribute__((always_inline)) void set_segment_register(uint16_t cs, uint16_t ds, uint16_t ss);
 
@@ -28,6 +28,7 @@ void _start(GraphicsConfig *graphics_config, MemoryMap *memory_map, void *acpi_t
     M_LOAD_GDT();
     set_segment_register(8, 16, 16);
 
+    mem_table_init(memory_map);
     schedule_init();
     pic_init();
     pic_timer_init();
@@ -36,30 +37,6 @@ void _start(GraphicsConfig *graphics_config, MemoryMap *memory_map, void *acpi_t
 
     IDT_init();
     M_LOAD_IDT();
-    init_paging();
-
-//    print_memory_map(memory_map);
-
-    struct CR0 cr0;
-    struct CR3 cr3;
-    uint64_t cr4;
-
-    __asm__ volatile ("mov rax, cr0" : "=a"(cr0));
-    __asm__ volatile ("mov rax, cr3" : "=a"(cr3));
-    __asm__ volatile ("mov rax, cr4" : "=a"(cr4));
-
-    struct PageMapLevel4Entry *pml4;
-    pml4 = (void *)((uint64_t)cr3.PML4_addr << 12u);
-
-    for (int i = 0; i < 512; i ++) {
-        PageMapLevel4[i] = pml4[i];
-    }
-
-    cr3.PML4_addr = ((uint64_t)PageMapLevel4) >> 12u;
-
-//    __asm__ volatile ("mov cr4, rax" : : "a"(cr4));
-    __asm__ volatile ("mov cr3, rax" : : "a"(cr3));
-//    __asm__ volatile ("mov cr0, rax" : : "a"(cr0));
 
     __asm__ volatile ("sti");
 

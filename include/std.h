@@ -10,6 +10,7 @@
 typedef _Bool bool;
 #define true ((_Bool)1)
 #define false ((_Bool)0)
+#define null ((void *)0)
 
 typedef struct DIVMOD {
     int64_t div;
@@ -150,6 +151,7 @@ bool strcmp(const char *a, const char *b);
 void strncpy(const char *src, char *dist, uint64_t n);
 void strcpy(const char *src, char *dist);
 void bool2str(char *dist, bool x);
+const char* bool2shortstraddr(bool x);
 const char* bool2straddr(bool x);
 bool ringbuf_write(struct RingBuffer* ring_buffer, uint8_t data);
 uint8_t ringbuf_read(struct RingBuffer* ring_buffer);

@@ -9,6 +9,7 @@
 #include <graphics/draw.h>
 #include <control_registers.h>
 #include <tasks/tasks.h>
+#include <memory_allocator.h>
 
 struct TaskRegisterState {
     uint64_t cr3;
@@ -55,28 +56,43 @@ void int_32_handler_schedule(struct TaskRegisterState *register_state) {  // cal
 }
 
 void schedule_init() {
-    (*((struct CR3*)&task_register_state[1].cr3)).PML4_addr = 0x3000u >> 12u;
-    (*((struct CR3*)&task_register_state[1].cr3)).PCID = 0;
+    struct CR3 kernel_cr3;
+    void *tmp;
+    __asm__ volatile ("mov rax, cr3" : "=a"(kernel_cr3));
+
+    task_register_state[1].cr3 = *(uint64_t*)&kernel_cr3;
     task_register_state[1].cs = 0x18;
     task_register_state[1].ss = 0x20;
     task_register_state[1].rflags =0x202;
-    task_register_state[1].rsp = 0x0500;  // 決め打ちなのでなんとかする
+    tmp = page_alloc(1);
+    if (tmp == null) {
+        print("task stack cannot allocate...");
+        hstop();
+    }
+    task_register_state[1].rsp = (uint64_t)tmp + 0x1000;
     task_register_state[1].rip = (uint64_t)task_2;
 
-    (*((struct CR3*)&task_register_state[2].cr3)).PML4_addr = 0x3000u >> 12u;
-    (*((struct CR3*)&task_register_state[2].cr3)).PCID = 0;
+    task_register_state[2].cr3 = *(uint64_t*)&kernel_cr3;
     task_register_state[2].cs = 0x28;
     task_register_state[2].ss = 0x30;
     task_register_state[2].rflags =0x202;
-    task_register_state[2].rsp = 0x1000;  // 決め打ちなのでなんとかする
+    if (tmp == null) {
+        print("task stack cannot allocate...");
+        hstop();
+    }
+    task_register_state[2].rsp = (uint64_t)tmp + 0x1000;
     task_register_state[2].rip = (uint64_t)task_3;
 
-    (*((struct CR3*)&task_register_state[3].cr3)).PML4_addr = 0x3000u >> 12u;
-    (*((struct CR3*)&task_register_state[3].cr3)).PCID = 0;
+    task_register_state[3].cr3 = *(uint64_t*)&kernel_cr3;
     task_register_state[3].cs = 0x38;
     task_register_state[3].ss = 0x40;
     task_register_state[3].rflags =0x202;
-    task_register_state[3].rsp = 0x1500;  // 決め打ちなのでなんとかする
+    tmp = page_alloc(1);
+    if (tmp == null) {
+        print("task stack cannot allocate...");
+        hstop();
+    }
+    task_register_state[3].rsp = (uint64_t)tmp + 0x1000;
     task_register_state[3].rip = (uint64_t)task_4;
 }
 

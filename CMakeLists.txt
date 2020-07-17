@@ -17,7 +17,6 @@ add_library(CieOS SHARED
         src/descriptor/interrupt.c
         src/graphics/draw.c
         src/graphics/print.c
-        src/memory_allocator/print.c
         src/main.c
         src/pic.c
         src/interrupt_handler/timer.c
@@ -33,7 +32,10 @@ add_library(CieOS SHARED
         src/interrupt_default_handler/int_default.c
         src/interrupt_default_handler/int_defalut_handler_array.c
 
-        src/interrupt_handler/page_fault.c src/tasks/tasks.c include/tasks/tasks.h src/interrupt_handler/mause.c
+        src/interrupt_handler/page_fault.c
+        src/tasks/tasks.c
+        src/interrupt_handler/mause.c
+        src/memory_allocator.c
         )
 
 set_target_properties(CieOS PROPERTIES PREFIX "")

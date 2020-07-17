@@ -39,7 +39,7 @@ uint64_t put(uint64_t *row, const char *str, uint64_t init_col, uint64_t now_col
             draw_char_bg(str[i], col * 8, *row * 16, gPRINTCOLOR);
         }
     }
-    return col;
+    return col - 1;
 }
 
 void puts(const char *str) {
