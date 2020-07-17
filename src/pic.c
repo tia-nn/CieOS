@@ -33,3 +33,18 @@ void pic_timer_init() {
     outp(0x40, 0xa9);  // 1193182 Hz / 1000 = 0x04a9 (0.0001s)
     outp(0x40, 0x04);
 }
+
+void kbc_send_wait() {
+    uint8_t status;
+    do {
+        __asm__ volatile ("in al, 0x64" : "=a"(status));
+    } while (status & 0x02);
+
+}
+
+void pic_kbc_init() {
+    kbc_send_wait();
+    __asm__ volatile ("out 0x64, al" : : "a"(0xd4));
+    kbc_send_wait();
+    __asm__ volatile ("out 0x60, al" : : "a"(0xf4));
+}

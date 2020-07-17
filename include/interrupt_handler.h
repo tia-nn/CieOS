@@ -33,9 +33,13 @@ void int_33_handler(union InterruptFrame *frame);
 void int_14_handler(union InterruptFrame *frame);
 //__attribute__((no_caller_saved_registers)) uint64_t int_128_handler();
 void int_128_handler();
+void int_44_handler(union InterruptFrame *frame) ;
 
 void schedule_init();
 
 void int_0x80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5, uint64_t arg6);  // must set rax before call
 void int_0x80_1(char *arg1);
+
+void int_print(const char *format, ...);
+void int_print_right(const char *format, ...);
 #endif //CIEOS_INTERRUPT_HANDLER_H

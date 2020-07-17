@@ -8,5 +8,6 @@
 void task_1();
 void task_2();
 void task_3();
+void task_4();
 
 #endif //CIEOS_INCLUDE_TASKS_TASKS_H

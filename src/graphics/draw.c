@@ -13,24 +13,33 @@ GraphicsConfig *g_graphics_config;
 
 const uint32_t gBGCOLOR = BLACK;
 
+struct BitAccess FRAMEBUFFER_IN_USE;
+
 
 void draw_fill(uint32_t color) {
     uint64_t *buf = (uint64_t *) g_graphics_config->framebuffer;
     uint64_t c = (uint64_t)color << 32 | color;
     for (uint64_t i = 0;
-         i < g_graphics_config->info.VerticalResolution * g_graphics_config->info.HorizontalResolution / 2; i++) {
+            i < g_graphics_config->info.VerticalResolution * g_graphics_config->info.HorizontalResolution / 2; i++) {
+
+        test_and_set((uint64_t *)&FRAMEBUFFER_IN_USE, 0);
         *(buf++) = c;
+        FRAMEBUFFER_IN_USE.bit_0 = 0;
     }
 }
 
 bool draw_pixel(uint64_t x, uint64_t y, uint32_t color) {
     const uint64_t width = g_graphics_config->info.HorizontalResolution;
     const uint64_t height = g_graphics_config->info.VerticalResolution;
+    uint32_t *frame_buffer = (uint32_t*)g_graphics_config->framebuffer;
 
     if (x >= width || y >= height) return false;
 
     uint64_t p = x + (y * width);
-    *((uint32_t*)g_graphics_config->framebuffer + p) = color;
+
+    test_and_set((uint64_t *)&FRAMEBUFFER_IN_USE, 0);
+    frame_buffer[p] = color;
+    FRAMEBUFFER_IN_USE.bit_0 = 0;
 
     return true;
 }

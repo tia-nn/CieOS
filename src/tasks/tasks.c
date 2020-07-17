@@ -52,6 +52,23 @@ void task_3() {
             draw_char_bg(buf[0], x + 16, y, WHITE);
             draw_char_bg(buf[1], x + 24, y, WHITE);
         }
-        halt();
+        else halt();
+    }
+}
+
+
+void task_4() {
+    const uint64_t x = draw_get_width() - 8 - 40, y = 48;
+    char buf[2];
+    uint8_t key_code;
+    while (true) {
+        if (ringbuf_read_dist(&MOUSE_BUFFER, &key_code)) {
+            itoa(key_code, buf, 2, 16, FILL_ZERO);
+            draw_char_bg('0', x + 0, y, WHITE);
+            draw_char_bg('x', x + 8, y, WHITE);
+            draw_char_bg(buf[0], x + 16, y, WHITE);
+            draw_char_bg(buf[1], x + 24, y, WHITE);
+        }
+        else halt();
     }
 }

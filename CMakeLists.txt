@@ -11,6 +11,7 @@ set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} -masm=intel")
 include_directories(include)
 add_library(CieOS SHARED
         src/std.c
+        src/std.s
         src/font/hankaku.c
         src/descriptor/segment.c
         src/descriptor/interrupt.c
@@ -32,7 +33,8 @@ add_library(CieOS SHARED
         src/interrupt_default_handler/int_default.c
         src/interrupt_default_handler/int_defalut_handler_array.c
 
-        src/interrupt_handler/page_fault.c src/tasks/tasks.c include/tasks/tasks.h)
+        src/interrupt_handler/page_fault.c src/tasks/tasks.c include/tasks/tasks.h src/interrupt_handler/mause.c
+        )
 
 set_target_properties(CieOS PROPERTIES PREFIX "")
 set_target_properties(CieOS PROPERTIES OUTPUT_NAME "kernel")

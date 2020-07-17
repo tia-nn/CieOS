@@ -58,6 +58,9 @@ restore_context:
     mov rax, [rdi + 0x08]
     mov rdi, [rdi + 0x30]
 
+    mov al, 0x20
+    out 0x20, al  # master pic EOI
+
     iretq
 
 

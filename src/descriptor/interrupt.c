@@ -41,6 +41,7 @@ void IDT_init() {
     IDT_set(13, (void *)int_13_handler, 8, 0, 0x0e, 0);
     IDT_set(14, (void *)int_14_handler, 8, 0, 0x0e, 0);
     IDT_set(33, (void *)int_33_handler, 8, 0, 0x0e, 0);
+    IDT_set(44, (void *)int_44_handler, 8, 0, 0x0e, 0);
     IDT_set(128, (void *)int_128_handler, 8, 0, 0x0e, 0);  // 0x80
 
     // more specific set...

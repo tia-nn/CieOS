@@ -17,6 +17,7 @@ uint64_t row_right = 0;
 uint64_t max_row = 0;
 uint64_t half_col = 0;
 
+struct BitAccess ROW_IN_USE;
 
 uint64_t put(uint64_t *row, const char *str, uint64_t init_col, uint64_t now_col) {
     if (max_row == 0) {
@@ -46,8 +47,12 @@ void puts(const char *str) {
         max_row = draw_get_height() / 16;
     }
 
+    test_and_set((uint64_t *)&ROW_IN_USE, 0);
+
     put(&row_left, str, 0, 0);
     NEWLINE(row_left);
+
+    ROW_IN_USE.bit_0 = 0;
 }
 
 void puts_right(const char *str) {
@@ -58,14 +63,20 @@ void puts_right(const char *str) {
         half_col = draw_get_width() / (2 * 8);
     }
 
+    test_and_set((uint64_t *)&ROW_IN_USE, 1);
+
     put(&row_right, str, half_col, half_col);
     NEWLINE(row_right);
+
+    ROW_IN_USE.bit_1 = 0;
 }
 
 void print(const char *format, ...) {
     if (max_row == 0) {
         max_row = draw_get_height() / 16;
     }
+
+    test_and_set((uint64_t *)&ROW_IN_USE, 0);
 
     va_list ap;
     va_start(ap, format);
@@ -87,6 +98,8 @@ void print(const char *format, ...) {
         }
     }
     NEWLINE(row_left);
+
+    ROW_IN_USE.bit_0 = 0;
 }
 
 void print_right(const char *format, ...) {
@@ -96,6 +109,8 @@ void print_right(const char *format, ...) {
     if (half_col == 0) {
         half_col = draw_get_width() / (2 * 8);
     }
+
+    test_and_set((uint64_t *)&ROW_IN_USE, 1);
 
     va_list ap;
     va_start(ap, format);
@@ -117,4 +132,6 @@ void print_right(const char *format, ...) {
         }
     }
     NEWLINE(row_right);
+
+    ROW_IN_USE.bit_1 = 0;
 }

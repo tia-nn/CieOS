@@ -134,6 +134,7 @@ struct BitAccess {
 
 extern uint64_t TIMER_COUNT;  // defined by timer.c
 extern struct RingBuffer KEYBOARD_BUFFER;  // defined by keyboard.c
+extern struct RingBuffer MOUSE_BUFFER;  // defined by mouse.c
 extern void * KERNEL_LOADED_POINT;
 extern void * ENTRY_POINT;
 
@@ -153,5 +154,7 @@ const char* bool2straddr(bool x);
 bool ringbuf_write(struct RingBuffer* ring_buffer, uint8_t data);
 uint8_t ringbuf_read(struct RingBuffer* ring_buffer);
 bool ringbuf_read_dist(struct RingBuffer* ring_buffer, uint8_t *dist);
+
+void test_and_set(uint64_t *arr, uint64_t pos);  // asm
 
 #endif //CIEOS_STD_H
