@@ -27,7 +27,7 @@ enum ITOA_FRAGS {
     ZERO_IS_EMPTY       = 0x40
 };
 
-#define RINGBUFFERSIZE 32
+#define RINGBUFFERSIZE 64
 
 struct RingBuffer {
     uint8_t buffer[RINGBUFFERSIZE];
