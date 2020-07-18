@@ -46,28 +46,28 @@ void _start(GraphicsConfig *graphics_config, MemoryMap *memory_map, void *acpi_t
 
 
 __attribute__((always_inline)) inline void set_segment_register(uint16_t cs, uint16_t ds, uint16_t ss) {
+    uint64_t rsp;
+    uint64_t rds = ds;
+    __asm__ volatile ("mov rax, rsp": "=a"(rsp));
+
+    struct InterruptFrameNoErrorCode frame = {
+            (uint64_t)&&ret,
+            cs,
+            0x202,
+            rsp,
+            ss,
+    };
 
     __asm__ volatile (
-    "mov ax, %0 \n"
-    "mov ds, ax \n"
-    "mov ax, %1 \n"
-    "mov ss, ax"
-    : : "m"(ds), "m"(ss)
-    );
-
-    void *a = &&ret;
-
-    __asm__ volatile (
-    "movzx eax, %0 \n"
-    "push rax \n"
-    "lea rax, +8[rsp] \n"
-    "push rax \n"
-    "pushfq \n"
-    "movzx eax, %1 \n"
-    "push rax \n"
+    "push %0 \n"
+    "push %1 \n"
     "push %2 \n"
+    "push %3 \n"
+    "push %4 \n"
+    "mov rax, %5 \n"
+    "mov ds, ax \n"
     "iretq"
-    : : "m"(ss), "m"(cs), "m"(a)
+    :: "m"(frame.ss),"m"(frame.rsp),"m"(frame.rflags),"m"(frame.cs),"m"(frame.rip),"m"(rds)
     );
     ret:
     return;
