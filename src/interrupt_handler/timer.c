@@ -76,6 +76,7 @@ void schedule_init() {
     task_register_state[2].cs = 0x28;
     task_register_state[2].ss = 0x30;
     task_register_state[2].rflags =0x202;
+    tmp = page_alloc(1);
     if (tmp == null) {
         print("task stack cannot allocate...");
         hstop();

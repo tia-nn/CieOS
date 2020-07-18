@@ -38,6 +38,17 @@ struct RingBuffer {
     bool overflow;
 };
 
+struct DateTime {
+    uint8_t year;
+    uint8_t month;
+    uint8_t day;
+    uint8_t hour;
+    uint8_t minute;
+    uint8_t second;
+
+    uint8_t _align[2];
+};
+
 struct DoubleWordAccess {
     uint32_t low;
     uint32_t high;
@@ -136,12 +147,14 @@ struct BitAccess {
 extern uint64_t TIMER_COUNT;  // defined by timer.c
 extern struct RingBuffer KEYBOARD_BUFFER;  // defined by keyboard.c
 extern struct RingBuffer MOUSE_BUFFER;  // defined by mouse.c
+extern struct DateTime RTC_DATA;  // defined by rtc.c
 extern void * KERNEL_LOADED_POINT;
 extern void * ENTRY_POINT;
 
 
 void halt();
-void hstop();
+
+_Noreturn void hstop();
 void sleepms(uint64_t ms);
 
 DIVMOD divmod(int64_t x, int64_t y);

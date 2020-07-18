@@ -17,7 +17,7 @@ void halt() {
     __asm__ volatile ("hlt");
 }
 
-void hstop() {
+_Noreturn void hstop() {
     while (true) __asm__ volatile ("hlt");
 }
 

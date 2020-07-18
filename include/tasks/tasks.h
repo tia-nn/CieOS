@@ -5,9 +5,12 @@
 #ifndef CIEOS_INCLUDE_TASKS_TASKS_H
 #define CIEOS_INCLUDE_TASKS_TASKS_H
 
-void task_1();
-void task_2();
-void task_3();
-void task_4();
+_Noreturn void task_1();
+
+_Noreturn void task_2();
+
+_Noreturn void task_3();
+
+_Noreturn void task_4();
 
 #endif //CIEOS_INCLUDE_TASKS_TASKS_H

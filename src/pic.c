@@ -34,6 +34,14 @@ void pic_timer_init() {
     outp(0x40, 0x04);
 }
 
+void pic_rtc_init() {
+    uint8_t b;
+    outp(0x70, 0x0b);
+    __asm__ volatile ("in al, 0x71" : "=a"(b));
+    b |= 0x10;
+    outp_v(0x71, b);
+}
+
 void kbc_send_wait() {
     uint8_t status;
     do {

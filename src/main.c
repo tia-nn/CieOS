@@ -32,8 +32,9 @@ void _start(GraphicsConfig *graphics_config, MemoryMap *memory_map, void *acpi_t
     schedule_init();
     pic_init();
     pic_timer_init();
+    pic_rtc_init();
     pic_kbc_init();
-    pic_set(0b11111000, 0b11101111); // master: slavePic, KBC, timer | slave: mouse
+    pic_set(0b11111000, 0b11101110); // master: slavePic, KBC, timer | slave: mouse
 
     IDT_init();
     M_LOAD_IDT();

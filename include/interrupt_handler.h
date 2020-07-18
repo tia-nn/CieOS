@@ -27,12 +27,13 @@ union InterruptFrame {
     struct InterruptFrameNoErrorCode noErrorCode;
 };
 
+void int_0_handler(union InterruptFrame *frame);
 void int_32_handler(union InterruptFrame *frame);  // timer.s
 void int_13_handler(union InterruptFrame *frame);
 void int_33_handler(union InterruptFrame *frame);
 void int_14_handler(union InterruptFrame *frame);
-//__attribute__((no_caller_saved_registers)) uint64_t int_128_handler();
 void int_128_handler();
+void int_40_handler(union InterruptFrame *frame);
 void int_44_handler(union InterruptFrame *frame) ;
 
 void schedule_init();

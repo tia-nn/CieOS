@@ -33,6 +33,7 @@
 void pic_init();
 void pic_set(uint8_t master, uint8_t slave);
 void pic_timer_init();
+void pic_rtc_init();
 void pic_kbc_init();
 
 #endif //CIEOS_INCLUDE_PIC_H

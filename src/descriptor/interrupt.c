@@ -37,10 +37,12 @@ void IDT_init() {
         IDT_set(vector, INT_DEFAULT_HANDLER_ARRAY[vector], 8, 0, 0xe, 0);
     }
 
+    IDT_set(0, (void *)int_0_handler, 8, 0, 0x0e, 0);
     IDT_set(32, (void *)int_32_handler, 8, 0, 0x0e, 0);
     IDT_set(13, (void *)int_13_handler, 8, 0, 0x0e, 0);
     IDT_set(14, (void *)int_14_handler, 8, 0, 0x0e, 0);
     IDT_set(33, (void *)int_33_handler, 8, 0, 0x0e, 0);
+    IDT_set(40, (void *)int_40_handler, 8, 0, 0x0e, 0);
     IDT_set(44, (void *)int_44_handler, 8, 0, 0x0e, 0);
     IDT_set(128, (void *)int_128_handler, 8, 0, 0x0e, 0);  // 0x80
 

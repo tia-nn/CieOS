@@ -36,6 +36,8 @@ add_library(CieOS SHARED
         src/tasks/tasks.c
         src/interrupt_handler/mause.c
         src/memory_allocator.c
+        src/interrupt_handler/div_zero.c
+        src/interrupt_handler/rtc.c
         )
 
 set_target_properties(CieOS PROPERTIES PREFIX "")

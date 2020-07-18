@@ -7,23 +7,41 @@
 #include <graphics/print.h>
 #include <graphics/draw.h>
 
-void task_1() {
-    uint64_t last = TIMER_COUNT;
-    uint64_t i = 0;
-    uint64_t _ = 0;
-    char buf[65];
+_Noreturn void task_1() {
+    const uint64_t x = draw_get_width() - 8 * 9, y = 0;
+    char buf[6];
+    struct DateTime last;
 
     while (true) {
-        if (last + 1000 < TIMER_COUNT) {
-            last = TIMER_COUNT;
-            itoa(last, buf, 17, 10, SET_NULL_TERMINATE);
-            print_right("timer count %", buf);
+        if (*(uint64_t*)&last != *(uint64_t*)&RTC_DATA) {
+            last = RTC_DATA;
+
+            uint8_t hour_low = last.hour & 0x0fu;
+            uint8_t hour_high = last.hour >> 4u;
+            hour_low += 9;
+            if (hour_low >= 10) {
+                hour_low %= 10;
+                hour_high = (hour_high + 1) % 3;
+            }
+            uint8_t hour = hour_low & 0x0fu | hour_high << 4u;
+
+            itoa(hour, buf, 2, 16, FILL_ZERO);
+            itoa(last.minute, buf + 2, 2, 16, FILL_ZERO);
+            itoa(last.second, buf + 4, 2, 10, FILL_ZERO);
+            draw_char_bg(buf[0], x, y, WHITE);
+            draw_char_bg(buf[1], x + 8*1, y, WHITE);
+            draw_char_bg(':', x + 8*2, y, WHITE);
+            draw_char_bg(buf[2], x + 8*3, y, WHITE);
+            draw_char_bg(buf[3], x + 8*4, y, WHITE);
+            draw_char_bg(':', x + 8*5, y, WHITE);
+            draw_char_bg(buf[4], x + 8*6, y, WHITE);
+            draw_char_bg(buf[5], x + 8*7, y, WHITE);
         }
         halt();
     }
 }
 
-void task_2() {
+_Noreturn void task_2() {
     uint64_t last = 0;
     uint32_t color = RED;
     const uint64_t x = draw_get_width() - 8 - 16, y = 16;
@@ -40,7 +58,7 @@ void task_2() {
     }
 }
 
-void task_3() {
+_Noreturn void task_3() {
     const uint64_t x = draw_get_width() - 8 - 40, y = 32;
     char buf[2];
     uint8_t key_code;
@@ -63,7 +81,7 @@ void draw_mouse(int64_t x, int64_t y) {
     draw_pixel(x + 1, y + 1, WHITE);
 }
 
-void task_4() {
+_Noreturn void task_4() {
     int8_t codebuf[3];
 
     uint8_t button;
@@ -95,6 +113,8 @@ void task_4() {
                     y -= b;
                     draw_mouse(x, y);
                     phase = 1;
+                    break;
+                default:
                     break;
             }
         }
