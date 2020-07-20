@@ -9,9 +9,8 @@
 extern const uint32_t gPRINTCOLOR;
 
 void puts(const char *str);
-void puts_right(const char *str);
 //__attribute__((no_caller_saved_registers))
 void print(const char *format, ...);
-void print_right(const char *format, ...);
+uint64_t putchar(char c);
 
 #endif //CIEOS_INCLUDE_GRAPHICS_PRINT_H

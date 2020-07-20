@@ -218,7 +218,7 @@ void print_memory_map(MemoryMap *mm) {
              SET_NULL_TERMINATE);
         if (is_usable_memory_type(iter->Type)) {
             status = "o";
-            print_right("%-% % %", start, end, size, status);
+            print("%-% % %", start, end, size, status);
         } else {
             status = "x";
         }

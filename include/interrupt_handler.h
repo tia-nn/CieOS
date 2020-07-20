@@ -42,5 +42,4 @@ void int_0x80(uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64
 void int_0x80_1(char *arg1);
 
 void int_print(const char *format, ...);
-void int_print_right(const char *format, ...);
 #endif //CIEOS_INTERRUPT_HANDLER_H

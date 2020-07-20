@@ -27,8 +27,8 @@ void sleepms(uint64_t ms) {
 }
 
 
-DIVMOD divmod(int64_t x, int64_t y) {
-    DIVMOD ans;
+struct DivMod divmod(int64_t x, int64_t y) {
+    struct DivMod ans;
     __asm__ volatile (
     "div rcx"
     : "=a"(ans.div), "=d"(ans.mod)
@@ -69,7 +69,7 @@ void itoa(uint64_t value, char *buffer, uint64_t buffer_size, uint64_t radix, ui
     uint64_t remain = value;
 
     while (remain && i) {
-        DIVMOD dm = divmod(remain, radix);
+        struct DivMod dm = divmod(remain, radix);
         remain = dm.div;
         tmp_buff[--i] = charset[dm.mod];
     }

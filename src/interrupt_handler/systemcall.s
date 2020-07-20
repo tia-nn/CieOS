@@ -22,9 +22,3 @@ int_print:
     mov rax, 2
     int 0x80
     ret
-
-.global int_print_right
-int_print_right:
-    mov rax, 3
-    int 0x80
-    ret

@@ -16,7 +16,7 @@
 uint8_t error;\
 __asm__ volatile ("in al, dx" : "=a"(error) : "d"(0x01f1));\
 if (error & 0b00000100u) {\
-print_right("error: " message );\
+print("error: " message );\
 return;\
 }} while(0)
 

@@ -88,8 +88,11 @@ uint64_t draw_get_width() {
     return g_graphics_config->info.HorizontalResolution;
 }
 
+void print_init();  // print.c
+
 bool draw_init(GraphicsConfig *gc) {
     g_graphics_config = gc;
     draw_fill(gBGCOLOR);
+    print_init();
     return true;
 }

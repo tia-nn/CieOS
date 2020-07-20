@@ -12,10 +12,10 @@ typedef _Bool bool;
 #define false ((_Bool)0)
 #define null ((void *)0)
 
-typedef struct DIVMOD {
+struct DivMod {
     int64_t div;
     int64_t mod;
-} DIVMOD;
+};
 
 enum ITOA_FRAGS {
     DEFAULT             = 0,
@@ -157,7 +157,7 @@ void halt();
 _Noreturn void hstop();
 void sleepms(uint64_t ms);
 
-DIVMOD divmod(int64_t x, int64_t y);
+struct DivMod divmod(int64_t x, int64_t y);
 void itoa(uint64_t value, char *buffer, uint64_t buffer_size, uint64_t radix, uint32_t flags);
 bool strncmp(const char *a, const char *b, uint64_t n);
 bool strcmp(const char *a, const char *b);
