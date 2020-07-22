@@ -5,6 +5,7 @@
 #include "std.h"
 
 #include <stdint.h>
+#include <graphics/print.h>
 
 
 static const char NUMBER[] = "0123456789abcdefghijklmnopqrstuvwxyz";
@@ -115,7 +116,7 @@ bool strcmp(const char *a, const char *b) {
     bool result = true;
     for (uint64_t i = 0; ; i ++) {
         result = result && a[i] == b[i];
-        if (!(a[i] && b[i])) return result;
+        if (!result || !a[i]) return result;
     }
 }
 
@@ -157,6 +158,13 @@ const char* bool2shortstraddr(bool x) {
     }
 }
 
+void ringbuf_init(struct RingBuffer* ring_buffer) {
+    ring_buffer->next_read = 0;
+    ring_buffer->next_write = 0;
+    ring_buffer->free = RINGBUFFERSIZE;
+    ring_buffer->overflow = false;
+}
+
 bool ringbuf_write(struct RingBuffer* ring_buffer, uint8_t data) {
     if (ring_buffer->free == 0) {
         ring_buffer->overflow = true;
@@ -184,7 +192,7 @@ uint8_t ringbuf_read(struct RingBuffer* ring_buffer) {
 }
 
 bool ringbuf_read_dist(struct RingBuffer* ring_buffer, uint8_t *dist) {
-    if (ring_buffer->free == RINGBUFFERSIZE) {
+    if (ring_buffer->free >= RINGBUFFERSIZE) {
         return false;
     }
     else {

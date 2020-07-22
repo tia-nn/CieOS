@@ -166,6 +166,7 @@ void strcpy(const char *src, char *dist);
 void bool2str(char *dist, bool x);
 const char* bool2shortstraddr(bool x);
 const char* bool2straddr(bool x);
+void ringbuf_init(struct RingBuffer* ring_buffer);
 bool ringbuf_write(struct RingBuffer* ring_buffer, uint8_t data);
 uint8_t ringbuf_read(struct RingBuffer* ring_buffer);
 bool ringbuf_read_dist(struct RingBuffer* ring_buffer, uint8_t *dist);

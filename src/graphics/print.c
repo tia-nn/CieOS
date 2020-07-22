@@ -34,7 +34,7 @@ uint64_t putchar(char c) {
         col = 0;
     } else if (c == '\b') {
         if (col != 0) {
-            draw_char_bg(' ', (col-1) * 8, row * 16, gPRINTCOLOR);
+            draw_char_bg(' ', (--col) * 8, row * 16, gPRINTCOLOR);
         }
     }
     else {

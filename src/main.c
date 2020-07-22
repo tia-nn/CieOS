@@ -30,11 +30,13 @@ void _start(GraphicsConfig *graphics_config, MemoryMap *memory_map, void *acpi_t
 
     mem_table_init(memory_map);
     schedule_init();
+    ringbuf_init(&KEYBOARD_BUFFER);
+    ringbuf_init(&MOUSE_BUFFER);
     pic_init();
     pic_timer_init();
     pic_rtc_init();
     pic_kbc_init();
-    pic_set(0b11111000, 0b11101110); // master: slavePic, KBC, timer | slave: mouse
+    pic_set(0b11111000, 0b11101110); // master: slavePic, KBC, timer | slave: mouse, rtc
 
     IDT_init();
     M_LOAD_IDT();
@@ -46,28 +48,21 @@ void _start(GraphicsConfig *graphics_config, MemoryMap *memory_map, void *acpi_t
 
 
 __attribute__((always_inline)) inline void set_segment_register(uint16_t cs, uint16_t ds, uint16_t ss) {
-    uint64_t rsp;
-    uint64_t rds = ds;
-    __asm__ volatile ("mov rax, rsp": "=a"(rsp));
-
-    struct InterruptFrameNoErrorCode frame = {
-            (uint64_t)&&ret,
-            cs,
-            0x202,
-            rsp,
-            ss,
-    };
+    void *a = &&ret;
 
     __asm__ volatile (
-    "push %0 \n"
-    "push %1 \n"
+    "movzx eax, %0 \n"
+    "push rax \n"
+    "lea rax, +8[rsp] \n"
+    "push rax \n"
+    "pushfq \n"
+    "movzx eax, %1 \n"
+    "push rax \n"
     "push %2 \n"
-    "push %3 \n"
-    "push %4 \n"
-    "mov rax, %5 \n"
+    "mov ax, %3 \n"
     "mov ds, ax \n"
     "iretq"
-    :: "m"(frame.ss),"m"(frame.rsp),"m"(frame.rflags),"m"(frame.cs),"m"(frame.rip),"m"(rds)
+    : : "m"(ss), "m"(cs), "m"(a), "m"(ds)
     );
     ret:
     return;

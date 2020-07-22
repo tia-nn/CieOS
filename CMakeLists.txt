@@ -38,7 +38,7 @@ add_library(CieOS SHARED
         src/memory_allocator.c
         src/interrupt_handler/div_zero.c
         src/interrupt_handler/rtc.c
-        )
+        src/keyboard-input.c)
 
 set_target_properties(CieOS PROPERTIES PREFIX "")
 set_target_properties(CieOS PROPERTIES OUTPUT_NAME "kernel")
@@ -47,5 +47,5 @@ set_target_properties(CieOS PROPERTIES SUFFIX ".elf")
 set(DIST_PATH "~/Projects/Qemu/test/kernel.elf")
 add_custom_command(TARGET CieOS COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:CieOS> ${DIST_PATH})
 
-set(DIST_PATH_2 "/run/media/tia/EB69-F2D4/kernel.elf")
-add_custom_command(TARGET CieOS COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:CieOS> ${DIST_PATH_2})
+#set(DIST_PATH_2 "/run/media/tia/EB69-F2D4/kernel.elf")
+#add_custom_command(TARGET CieOS COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:CieOS> ${DIST_PATH_2})
