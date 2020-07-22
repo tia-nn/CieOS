@@ -41,6 +41,6 @@ __asm__ volatile (\
 "lea rax, %0 \n"\
 "lidt [rax]"\
 : : "m"(idtr));\
-} while (0);
+} while (0)
 
 #endif //CIEOS_INCLUDE_DESCRIPTOR_INTERRUPT_H

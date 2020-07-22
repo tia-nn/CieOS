@@ -63,7 +63,7 @@ void GDT_init();
 //: : "m"(gdtr));\
 //} while(0);
 
-#define GDT_LEN 9
+#define GDT_LEN 11
 #define GDT_DESCRIPTOR_SIZE (sizeof(struct SegmentDescriptor))
 #define GDT_LIMIT (GDT_LEN * GDT_DESCRIPTOR_SIZE - 1)
 
@@ -77,7 +77,7 @@ __asm__ volatile (\
 "lea rax, %0 \n"\
 "lgdt [rax]"\
 : : "m"(gdtr));\
-} while (0);
+} while (0)
 
 
 //__attribute__((always_inline)) void load_global_descriptor_table();
