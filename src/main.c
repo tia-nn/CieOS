@@ -24,18 +24,10 @@ void _start(GraphicsConfig *graphics_config, MemoryMap *memory_map, void *acpi_t
 
     __asm__ volatile ("cli");
 
-    char buf[17];
-    itoa((uint64_t)code_top, buf, 17, 16, SET_NULL_TERMINATE | FILL_ZERO);
-    print("code_top: %\n", buf);
-
     GDT_init();
     M_LOAD_GDT();
-//    set_segment_register(8, 16, 16);
-    set_segment_register(9 * 8 | 3, 10 * 8 | 3, 10 * 8 | 3);
-    print("fugafuga");
-    while (true) {
+    set_segment_register(8, 16, 16);
 
-    }
     mem_table_init(memory_map);
     schedule_init();
     ringbuf_init(&KEYBOARD_BUFFER);
@@ -44,12 +36,10 @@ void _start(GraphicsConfig *graphics_config, MemoryMap *memory_map, void *acpi_t
     pic_timer_init();
     pic_rtc_init();
     pic_kbc_init();
-    pic_set(0b11111111, 0b11101110); // master: slavePic, KBC, timer | slave: mouse, rtc
+    pic_set(0b11111000, 0b11101110); // master: slavePic, KBC, timer | slave: mouse, rtc
 
     IDT_init();
     M_LOAD_IDT();
-
-
 
     __asm__ volatile ("sti");
 
@@ -75,5 +65,5 @@ __attribute__((always_inline)) inline void set_segment_register(uint16_t cs, uin
     : : "m"(ss), "m"(cs), "m"(a), "m"(ds)
     );
     ret:
-    print("hogehoge\n");
+    __asm__ volatile ("nop");
 }

@@ -13,6 +13,7 @@
 
 struct TaskRegisterState {
     uint64_t cr3;
+    uint64_t ds;
 
     uint64_t rax;
     uint64_t rcx;

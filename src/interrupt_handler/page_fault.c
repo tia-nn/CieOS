@@ -24,14 +24,14 @@ void int_14_handler(union InterruptFrame *frame) {
     itoa(frame->withErrorCode.ss, ss, 17, 16, SET_NULL_TERMINATE | FILL_ZERO);
     itoa(_ds, ds, 17, 16, SET_NULL_TERMINATE | FILL_ZERO);
 
-    print("interrupt --- %", "14 - #PF");
-    print("error_code: %", errorcode);
-    print("rip:        % ( offset: % )", rip, offset_buf);
-    print("cs :        %", cs);
-    print("rflags:     %", rflags);
-    print("rsp:        %", rsp);
-    print("ss:         %", ss);
-    print("ds:         %", ds);
+    print("interrupt --- %", "14 - #PF" "\n");
+    print("error_code: %" "\n", errorcode);
+    print("rip:        % ( offset: % )" "\n", rip, offset_buf);
+    print("cs :        %" "\n", cs);
+    print("rflags:     %" "\n", rflags);
+    print("rsp:        %" "\n", rsp);
+    print("ss:         %" "\n", ss);
+    print("ds:         %" "\n", ds);
 
     hstop();
 }

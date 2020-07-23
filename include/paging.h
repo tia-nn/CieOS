@@ -20,11 +20,25 @@ struct PageMapLevel4Entry {
     unsigned _ignore: 1;
     unsigned _must_be_0: 1;
     unsigned ignore: 4;
-    struct {
-        unsigned addr: 28;
-        unsigned _must_be_0: 12;
-    } phyAddr_of_pageDirectoryPointerTable;
+    unsigned phyAddr: 28;
+    unsigned _must_be_0_: 12;
     unsigned _ignore_2: 11;
+    unsigned xd: 1;
+};
+
+struct PageDirectoryPointerTableEntry {
+    unsigned present: 1;
+    unsigned read_write: 1;
+    unsigned user_supervisor: 1;
+    unsigned pageLevel_writeThrough: 1;
+    unsigned pageLevel_cache_disable: 1;
+    unsigned accessed: 1;
+    unsigned _ignore_1: 1;
+    unsigned ps_must_be_0: 1;
+    unsigned _ignore_2: 4;
+    unsigned phyAddr: 28;
+    unsigned _must_be_0: 12;
+    unsigned _ignore_3: 11;
     unsigned xd: 1;
 };
 
@@ -36,7 +50,7 @@ struct PageDirectoryPointerTableEntry_1GBPage {
     unsigned pageLevel_cache_disable: 1;
     unsigned accessed: 1;
     unsigned dirty: 1;
-    unsigned must_be_1: 1;
+    unsigned ps_must_be_1: 1;
     unsigned global: 1;
     unsigned _ignore: 3;
     unsigned pat: 1;
@@ -47,6 +61,39 @@ struct PageDirectoryPointerTableEntry_1GBPage {
     } phyAddr_of_1GB_page;
     unsigned _ignore_3: 7;
     unsigned protect_key: 4;
+    unsigned xd: 1;
+};
+
+struct PageDirectoryEntry {
+    unsigned present: 1;
+    unsigned read_write: 1;
+    unsigned user_supervisor: 1;
+    unsigned pageLevel_writeThrough: 1;
+    unsigned pageLevel_cache_disable: 1;
+    unsigned accessed: 1;
+    unsigned _ignore_1: 1;
+    unsigned ps_must_be_0: 1;
+    unsigned _ignore_2: 4;
+    unsigned phyAddr: 28;
+    unsigned _must_be_0: 12;
+    unsigned _ignore_3: 11;
+    unsigned xd: 1;
+};
+
+struct PageTableEntry {
+    unsigned present: 1;
+    unsigned read_write: 1;
+    unsigned user_supervisor: 1;
+    unsigned pageLevel_writeThrough: 1;
+    unsigned pageLevel_cache_disable: 1;
+    unsigned accessed: 1;
+    unsigned dirty: 1;
+    unsigned pat: 1;
+    unsigned global: 1;
+    unsigned _ignore: 3;
+    unsigned phyAddr: 28;
+    unsigned _must_be_0: 12;
+    unsigned _ignore_: 11;
     unsigned xd: 1;
 };
 
