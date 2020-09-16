@@ -1,0 +1,3 @@
+[submodule "cpu-typing"]
+	path = cpu-typing
+	url = https://github.com/Lan-t/cpu-typing
