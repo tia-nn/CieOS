@@ -1,0 +1,5 @@
+master
+.idea
+.vscode
+cmake-build-debug
+qeme-run.sh
