@@ -13,5 +13,6 @@
 #define GDT_KERNEL_DS 2
 
 void GDT_initial();
+void IDT_initial();
 
 #endif //CIEOS_SRC_DESCRIPTOR_H

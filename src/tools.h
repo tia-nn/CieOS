@@ -108,6 +108,18 @@ struct BitAccess {
 #define BIT_ARR_ACCESS(target, index) _BIT_ARR_ACCESS_(target, index)
 #define _BIT_ARR_ACCESS_(target, index) (*((struct BitAccess*)&target)).bit_##index
 
+enum ITOA_FRAGS {
+    DEFAULT             = 0u,
+    FILL_SPACE          = 0x1u,
+    FILL_ZERO           = 0x2u,
+    IS_SIGNED           = 0x4u,
+    SET_SIGN            = 0x8u,
+    UPPERCASE           = 0x10u,
+    SET_NULL_TERMINATE  = 0x20u,
+    ZERO_IS_EMPTY       = 0x40u
+};
+
+void itoa(uint64_t value, char *buffer, uint64_t buffer_size, uint64_t radix, uint32_t flags);
 void test_and_set(uint64_t *bitArr, uint64_t pos);  // asm
 
 #endif //CIEOS_SRC_TOOLS_H

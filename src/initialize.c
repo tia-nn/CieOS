@@ -34,5 +34,7 @@ void initialize(GraphicsConfig *gc) {
     SegmentRegister kernel_ds = {0, 0, GDT_KERNEL_DS};
     set_segment_register(kernel_cs, kernel_ds, kernel_ds);
 
+    IDT_initial();
+
     initialize_print(gc);
 }

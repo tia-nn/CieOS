@@ -19,5 +19,14 @@ _Noreturn void _start(GraphicsConfig *graphics_config, MemoryMap *memory_map, vo
         }
     }
 
+    print("hogehoge\n");
+
+    __asm__ volatile ("sti");
+
+    volatile a = 0;
+    a / 0;
+
+    __asm__ volatile ("int 0");
+
     while (true) __asm__ volatile ("hlt");
 }

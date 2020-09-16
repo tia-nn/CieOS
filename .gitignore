@@ -6,3 +6,5 @@ qeme-run.sh
 
 src/hankaku.c
 src/hankaku.h
+src/default_handler.c
+src/default_handler.h

@@ -23,7 +23,8 @@ add_library(CieOS SHARED
         src/print.h
         src/hankaku.c
         src/hankaku.h
-        )
+        src/default_handler.c
+        src/default_handler.h)
 
 set_target_properties(CieOS PROPERTIES PREFIX "")
 set_target_properties(CieOS PROPERTIES OUTPUT_NAME "kernel")

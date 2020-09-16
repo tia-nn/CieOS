@@ -7,6 +7,7 @@
 #include <stdbool.h>
 #include <x64_IA32e64.h>
 #include "tools.h"
+#include "default_handler.h"
 
 // ------ GDT ------
 
@@ -69,3 +70,41 @@ void set_data_segment(DataSegmentDescriptor *dist, uint32_t base, uint32_t limit
 }
 
 // ------ IDT ------
+
+
+IDTGateDescriptor IDT[256];
+
+void set_IDT(uint8_t vector, void *offset, SegmentRegister ss, uint8_t ist, uint8_t type, uint8_t dpl) {
+    IDTGateDescriptor *id = &IDT[vector];
+
+    id->_0_fill_ = 0;
+    id->_0_fill_s = 0;
+    id->present = 1;
+
+    if (dpl) id->dpl = 3; else id->dpl = 0;
+    id->dpl = (dpl > 3) ? 3 : dpl;
+
+    id->segment_selector = ss;
+    id->ist = ist;
+    id->type = type;
+
+    uint64_t offset_int = (uint64_t) offset;
+    id->offset_15_00 = offset_int;
+    id->offset_31_16 = offset_int >> 16u;
+    id->offset_63_32 = offset_int >> 32u;
+}
+
+void IDT_initial() {
+    SegmentRegister ss = {0, 0, GDT_KERNEL_CS};
+
+    for (uint16_t vector = 0; vector < 256; vector ++) {
+        set_IDT(vector, INT_DEFAULT_HANDLER_ARRAY[vector], ss, 0, 0xe, 0);
+    }
+
+    // more specific set...
+
+    IDTR idtr;
+    idtr.base = (uint64_t)IDT;
+    idtr.limit = 8 * 256;
+    __asm__ volatile ("lidt [%0]"::"r"(&idtr));
+}

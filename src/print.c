@@ -5,6 +5,7 @@
 #include "print.h"
 #include <stdint.h>
 #include <stdbool.h>
+#include <zconf.h>
 #include "hankaku.h"
 #include "tools.h"
 #include "bootloader.h"
@@ -159,8 +160,18 @@ void putchar(uint8_t c) {
     }
 }
 
-void print(const char *str) {
-    for (uint64_t i = 0; str[i]; i ++) {
-        putchar(str[i]);
+void print(const char *format, ...) {
+    va_list ap;
+    va_start(ap, format);
+    for (uint64_t i = 0; format[i]; i ++) {
+        if (format[i] == '%') {
+            const char * v = va_arg(ap, const char *);
+            for (uint64_t j = 0; v[j]; j ++) {
+                putchar(v[j]);
+            }
+        }
+        else {
+            putchar(format[i]);
+        }
     }
 }

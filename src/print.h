@@ -29,6 +29,6 @@ bool draw_pixel(uint64_t x, uint64_t y, uint32_t color);
 bool draw_char(uint64_t x, uint64_t y, uint8_t c, uint32_t color);
 bool draw_char_bg(uint64_t x, uint64_t y, uint8_t c, uint32_t color, uint32_t bgColor);
 void putchar(uint8_t c);
-void print(const char *str);
+void print(const char *format, ...);
 
 #endif //CIEOS_SRC_PRINT_H
