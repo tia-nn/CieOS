@@ -5,6 +5,8 @@
 #ifndef CIEOS_SRC_INITIALIZE_H
 #define CIEOS_SRC_INITIALIZE_H
 
-void initialize();
+#include "bootloader.h"
+
+void initialize(GraphicsConfig *gc);
 
 #endif //CIEOS_SRC_INITIALIZE_H

@@ -25,7 +25,7 @@ void GDT_initial() {
 
     GDTR gdtr;
     gdtr.base = (uint64_t)GDT;
-    gdtr.limit = 64 * GDT_LENGTH;
+    gdtr.limit = 8 * GDT_LENGTH;
     __asm__ volatile ("lgdt [%0]"::"r"(&gdtr));
 }
 

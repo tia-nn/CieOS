@@ -5,6 +5,7 @@
 #include <x64_IA32e64.h>
 #include "initialize.h"
 #include "descriptor.h"
+#include "print.h"
 
 __attribute__((always_inline)) inline
 void set_segment_register(SegmentRegister cs, SegmentRegister ds, SegmentRegister ss) {
@@ -27,9 +28,11 @@ void set_segment_register(SegmentRegister cs, SegmentRegister ds, SegmentRegiste
     __asm__ volatile ("nop");
 }
 
-void initialize() {
+void initialize(GraphicsConfig *gc) {
     GDT_initial();
     SegmentRegister kernel_cs = {0, 0, GDT_KERNEL_CS};
     SegmentRegister kernel_ds = {0, 0, GDT_KERNEL_DS};
     set_segment_register(kernel_cs, kernel_ds, kernel_ds);
+
+    initialize_print(gc);
 }

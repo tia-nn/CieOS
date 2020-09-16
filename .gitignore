@@ -3,3 +3,6 @@ master
 .vscode
 cmake-build-debug
 qeme-run.sh
+
+src/hankaku.c
+src/hankaku.h

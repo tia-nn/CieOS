@@ -9,7 +9,21 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -masm=intel -Wno-builtin-declaration-mismatc
 set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} -masm=intel")
 
 include_directories(cpu-typing/include)
-add_library(CieOS SHARED src/main.c src/bootloader.h src/initialize.c src/initialize.h src/descriptor.c src/descriptor.h src/tools.c src/tools.h)
+add_library(CieOS SHARED
+        src/main.c
+        src/bootloader.h
+        src/initialize.c
+        src/initialize.h
+        src/descriptor.c
+        src/descriptor.h
+        src/tools.c
+        src/tools.s
+        src/tools.h
+        src/print.c
+        src/print.h
+        src/hankaku.c
+        src/hankaku.h
+        )
 
 set_target_properties(CieOS PROPERTIES PREFIX "")
 set_target_properties(CieOS PROPERTIES OUTPUT_NAME "kernel")
