@@ -5,8 +5,13 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "bootloader.h"
+#include "initialize.h"
 
 _Noreturn void _start(GraphicsConfig *graphics_config, MemoryMap *memory_map, void *acpi_table, void* code_top, void *entrypoint) {
+    __asm__ volatile ("cli");
+
+    initialize();
+
     for (uint64_t i = 0; i < graphics_config->info.VerticalResolution * graphics_config->info.HorizontalResolution; i ++) {
         ((uint32_t*)graphics_config->framebuffer)[i] = 0xaaaaaa;
     }
