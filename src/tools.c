@@ -4,6 +4,11 @@
 
 #include "tools.h"
 
+void *KERNEL_LOADED_POINT;
+void *ENTRY_POINT;
+
+uint64_t TIMER_COUNT;
+
 void itoa(uint64_t value, char *buffer, uint64_t buffer_size, uint64_t radix, uint32_t flags) {
     const char NUMBER[] = "0123456789abcdefghijklmnopqrstuvwxyz";
     const char NUMBER_UPPERCASE[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -43,7 +48,7 @@ void itoa(uint64_t value, char *buffer, uint64_t buffer_size, uint64_t radix, ui
         remain = remain / radix;
     }
 
-    if (i == buffer_size && flags & ZERO_IS_EMPTY && buffer_size) {
+    if (i == buffer_size && !(flags & ZERO_IS_EMPTY) && buffer_size) {
         tmp_buff[--i] = charset[0];
     }
 

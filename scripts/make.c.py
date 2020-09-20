@@ -1,12 +1,17 @@
 import sys
 
+font_data_path = sys.argv[1]
+output_dir = sys.argv[2]
+
+print(sys.argv)
+
 stdout = sys.stdout
 
 # ------ font ------
 
-code = open('hankaku.txt').read()
-dist_c = open('../src/hankaku.c', 'w')
-dist_h = open('../src/hankaku.h', 'w')
+code = open(font_data_path).read()
+dist_c = open(f'{output_dir.rstrip("/")}/hankaku.c', 'w')
+dist_h = open(f'{output_dir.rstrip("/")}/hankaku.h', 'w')
 sys.stdout = dist_c
 
 fonts = code.split('\n\n')
@@ -303,8 +308,8 @@ info = [
            '255 - default handler'
        ]
 
-dist_c = open('../src/default_handler.c', 'w')
-dist_h = open('../src/default_handler.h', 'w')
+dist_c = open(f'{output_dir.rstrip("/")}/default_handler.c', 'w')
+dist_h = open(f'{output_dir.rstrip("/")}/default_handler.h', 'w')
 
 sys.stdout = dist_c
 

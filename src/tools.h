@@ -9,6 +9,9 @@
 #include <stdbool.h>
 
 #define to_bool(value) ((value)?true:false)
+#define boot2ox(value) ((value)?"o":"x")
+
+#define null ((void *)0)
 
 struct DoubleWordAccess {
     uint32_t low;
@@ -118,6 +121,11 @@ enum ITOA_FRAGS {
     SET_NULL_TERMINATE  = 0x20u,
     ZERO_IS_EMPTY       = 0x40u
 };
+
+extern void *KERNEL_LOADED_POINT;
+extern void *ENTRY_POINT;
+
+extern uint64_t TIMER_COUNT;
 
 void itoa(uint64_t value, char *buffer, uint64_t buffer_size, uint64_t radix, uint32_t flags);
 void test_and_set(uint64_t *bitArr, uint64_t pos);  // asm

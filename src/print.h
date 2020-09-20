@@ -24,8 +24,9 @@ enum Color {
     MAGENTA = 0xff00ffu,
 };
 
-void initialize_print(GraphicsConfig *gc);
+void initial_print(GraphicsConfig *gc);
 bool draw_pixel(uint64_t x, uint64_t y, uint32_t color);
+bool draw_fill(uint32_t color);
 bool draw_char(uint64_t x, uint64_t y, uint8_t c, uint32_t color);
 bool draw_char_bg(uint64_t x, uint64_t y, uint8_t c, uint32_t color, uint32_t bgColor);
 void putchar(uint8_t c);

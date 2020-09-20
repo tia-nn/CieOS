@@ -25,10 +25,11 @@ uint64_t PRINT_IN_USE = 0;
 #define FRAMEBUFFER_IN_USE 0
 #define POSITION_IN_USE 1
 
-void initialize_print(GraphicsConfig *gc) {
+void initial_print(GraphicsConfig *gc) {
     GC = gc;
     MAX_COL = gc->info.HorizontalResolution / 8;
     MAX_ROW = gc->info.VerticalResolution / 16;
+    draw_fill(BG_COLOR);
 }
 
 bool draw_pixel(uint64_t x, uint64_t y, uint32_t color) {
@@ -61,6 +62,24 @@ bool draw_2pixel(uint64_t x, uint64_t y, uint64_t dot2) {  // 左右逆になる
     test_and_set(&PRINT_IN_USE, FRAMEBUFFER_IN_USE);
     *dist = dot2;
     BIT_ARR_ACCESS(PRINT_IN_USE, FRAMEBUFFER_IN_USE) = 0;
+
+    return true;
+}
+
+bool draw_fill(uint32_t color) {
+    const uint64_t width = GC -> info.HorizontalResolution;
+    const uint64_t height = GC->info.VerticalResolution;
+    const uint64_t dot2 = (uint64_t)color << 32u | color;
+    bool width_is_odd = width % 2;
+
+    for (uint64_t i = 0; i < height; i ++) {
+        for (uint64_t j = 0; j <= width - 2; j += 2) {
+            if (!draw_2pixel(j, i, dot2)) return false;
+        }
+        if (width_is_odd) {
+            if (!draw_pixel(width - 1, i, color)) return false;
+        }
+    }
 
     return true;
 }

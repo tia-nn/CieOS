@@ -8,6 +8,7 @@
 #include <x64_IA32e64.h>
 #include "tools.h"
 #include "default_handler.h"
+#include "interrupt_handler.h"
 
 // ------ GDT ------
 
@@ -23,6 +24,8 @@ void GDT_initial() {
     GDT[0] = 0x0000000000000000;  // null descriptor
     set_code_segment((CodeSegmentDescriptor *) GDT + GDT_KERNEL_CS, 0, true, true, true, false, true);
     set_data_segment((DataSegmentDescriptor *) GDT + GDT_KERNEL_DS, 0x00, 0xfffff, 0, true, false, true, true);
+    set_code_segment((CodeSegmentDescriptor *) GDT + GDT_USER_CS, 3, true, true, true, false, true);
+    set_data_segment((DataSegmentDescriptor *) GDT + GDT_USER_DS, 0x00, 0xfffff, 3, true, false, true, true);
 
     GDTR gdtr;
     gdtr.base = (uint64_t)GDT;
@@ -74,6 +77,26 @@ void set_data_segment(DataSegmentDescriptor *dist, uint32_t base, uint32_t limit
 
 IDTGateDescriptor IDT[256];
 
+void set_IDT(uint8_t vector, void *offset, SegmentRegister ss, uint8_t ist, uint8_t type, uint8_t dpl);
+
+void IDT_initial() {
+    SegmentRegister ss = {0, 0, GDT_KERNEL_CS};
+
+    for (uint16_t vector = 0; vector < 256; vector ++) {
+        set_IDT(vector, INT_DEFAULT_HANDLER_ARRAY[vector], ss, 0, 0xe, 0);
+    }
+
+    set_IDT(13, int_13_GP_handler, ss, 0, 0xe, 0);
+    set_IDT(32, int_32_TIMER_handler, ss, 0, 0xe, 0);
+
+    // more specific set...
+
+    IDTR idtr;
+    idtr.base = (uint64_t)IDT;
+    idtr.limit = 8 * 256;
+    __asm__ volatile ("lidt [%0]"::"r"(&idtr));
+}
+
 void set_IDT(uint8_t vector, void *offset, SegmentRegister ss, uint8_t ist, uint8_t type, uint8_t dpl) {
     IDTGateDescriptor *id = &IDT[vector];
 
@@ -92,19 +115,4 @@ void set_IDT(uint8_t vector, void *offset, SegmentRegister ss, uint8_t ist, uint
     id->offset_15_00 = offset_int;
     id->offset_31_16 = offset_int >> 16u;
     id->offset_63_32 = offset_int >> 32u;
-}
-
-void IDT_initial() {
-    SegmentRegister ss = {0, 0, GDT_KERNEL_CS};
-
-    for (uint16_t vector = 0; vector < 256; vector ++) {
-        set_IDT(vector, INT_DEFAULT_HANDLER_ARRAY[vector], ss, 0, 0xe, 0);
-    }
-
-    // more specific set...
-
-    IDTR idtr;
-    idtr.base = (uint64_t)IDT;
-    idtr.limit = 8 * 256;
-    __asm__ volatile ("lidt [%0]"::"r"(&idtr));
 }

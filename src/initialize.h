@@ -7,6 +7,6 @@
 
 #include "bootloader.h"
 
-void initialize(GraphicsConfig *gc);
+void initialize(GraphicsConfig *gc, MemoryMap *mm);
 
 #endif //CIEOS_SRC_INITIALIZE_H

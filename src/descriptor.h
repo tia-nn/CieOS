@@ -7,10 +7,12 @@
 
 #include <x64_IA32e64.h>
 
-#define GDT_LENGTH 3
+#define GDT_LENGTH 5
 
 #define GDT_KERNEL_CS 1
 #define GDT_KERNEL_DS 2
+#define GDT_USER_CS 3
+#define GDT_USER_DS 4
 
 void GDT_initial();
 void IDT_initial();

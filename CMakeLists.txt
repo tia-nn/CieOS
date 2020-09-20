@@ -24,7 +24,20 @@ add_library(CieOS SHARED
         src/hankaku.c
         src/hankaku.h
         src/default_handler.c
-        src/default_handler.h)
+        src/default_handler.h
+        src/interrupt_handler.c
+        src/interrupt_handler.h
+        src/peripheral_control.c src/peripheral_control.h)
+
+add_custom_command(OUTPUT
+        ${CMAKE_CURRENT_SOURCE_DIR}src/hankaku.c
+        ${CMAKE_CURRENT_SOURCE_DIR}src/hankaku.h
+        ${CMAKE_CURRENT_SOURCE_DIR}src/default_handler.c
+        ${CMAKE_CURRENT_SOURCE_DIR}src/default_handler.h
+
+        COMMAND "python" "${CMAKE_CURRENT_SOURCE_DIR}/scripts/make.c.py"
+        "${CMAKE_CURRENT_SOURCE_DIR}/scripts/hankaku.txt"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src")
 
 set_target_properties(CieOS PROPERTIES PREFIX "")
 set_target_properties(CieOS PROPERTIES OUTPUT_NAME "kernel")
@@ -32,3 +45,4 @@ set_target_properties(CieOS PROPERTIES SUFFIX ".elf")
 
 set(DIST_PATH "~/Projects/Qemu/test/kernel.elf")
 add_custom_command(TARGET CieOS COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:CieOS> ${DIST_PATH})
+add_custom_command(TARGET CieOS COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/objdump.sh $<TARGET_FILE:CieOS>)
